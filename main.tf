@@ -32,7 +32,7 @@ resource "google_compute_instance_template" "exam" {
     network = "default"
     access_config {
       nat_ip = google_compute_address.static.address
-      network_tier = "standar"
+      network_tier = "STANDARD"
     }
   }
 
@@ -43,9 +43,17 @@ resource "google_compute_instance_template" "exam" {
 metadata_startup_script = file("${path.module}/template/install_nginx.sh")
 }
 
+resource "google_compute_http_health_check" "default" {
+  name               = "default"
+  request_path       = "/"
+  check_interval_sec = 1
+  timeout_sec        = 1
+}
+
 resource "google_compute_target_pool" "exam" {
   name = "exam-pool"
   region = "us-central1"
+  health_checks = [google_compute_http_health_check.default.name,]
 }
 resource "google_compute_instance_group_manager" "exam" {
   name = "group-skydrop"
