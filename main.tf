@@ -1,6 +1,6 @@
 resource "google_compute_autoscaler" "exam" {
   name   = "autocaler"
-  zone   = "us-central1-a"
+  zone   = "europe-west1-a"
   target = google_compute_instance_group_manager.mig.id
 
   autoscaling_policy {
@@ -16,7 +16,7 @@ resource "google_compute_autoscaler" "exam" {
 
 resource "google_compute_address" "static" {
   name = "ipv4-address"
-  region = "us-central1"
+  region = "europe-west1"
   network_tier = "STANDARD"
 }
 ################################################################################################
@@ -32,7 +32,7 @@ resource "google_compute_subnetwork" "exam-proxy-subnet" {
   name          = "exam-proxy-subnet"
   provider      = google-beta
   ip_cidr_range = "10.0.0.0/24"
-  region        = "us-central1"
+  region        = "europe-west1"
   purpose       = "REGIONAL_MANAGED_PROXY"
   role          = "ACTIVE"
   network       = google_compute_network.exam-network.id
@@ -43,7 +43,7 @@ resource "google_compute_subnetwork" "exam-subnet" {
   name          = "exam-subnet"
   provider      = google-beta
   ip_cidr_range = "10.0.1.0/24"
-  region        = "us-central1"
+  region        = "europe-west1"
   network       = google_compute_network.exam-network.id
 }
 
@@ -51,7 +51,7 @@ resource "google_compute_subnetwork" "exam-subnet" {
 resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
   name                  = "exam-forwarding-rule"
   provider              = google-beta
-  region                = "us-central1"
+  region                = "europe-west1"
   depends_on            = [google_compute_subnetwork.exam-proxy-subnet]
   ip_protocol           = "TCP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
@@ -66,7 +66,7 @@ resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
 resource "google_compute_region_target_http_proxy" "default" {
   name     = "exam-target-http-proxy"
   provider = google-beta
-  region   = "us-central1"
+  region   = "europe-west1"
   url_map  = google_compute_region_url_map.default.id
 }
 
@@ -74,14 +74,14 @@ resource "google_compute_region_target_http_proxy" "default" {
 resource "google_compute_region_url_map" "default" {
   name            = "exam-regional-url-map"
   provider        = google-beta
-  region          = "us-central1"
+  region          = "europe-west1"
   default_service = google_compute_region_backend_service.default.id
 }
 
 resource "google_compute_region_health_check" "default" {
   name     = "exam-hc"
   provider = google-beta
-  region   = "us-central1"
+  region   = "europe-west1"
   http_health_check {
     port_specification = "USE_SERVING_PORT"
   }
@@ -91,7 +91,7 @@ resource "google_compute_region_health_check" "default" {
 resource "google_compute_region_backend_service" "default" {
   name                  = "exam-backend-subnet"
   provider              = google-beta
-  region                = "us-central1"
+  region                = "europe-west1"
   protocol              = "HTTP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
   timeout_sec           = 10
@@ -107,7 +107,7 @@ resource "google_compute_region_backend_service" "default" {
 resource "google_compute_instance_group_manager" "mig" {
   name = "group-skydrop"
   provider = google-beta
-  zone = "us-central1-a"
+  zone = "europe-west1-a"
 
   version {
     instance_template  = google_compute_instance_template.exam.id
@@ -125,7 +125,7 @@ resource "google_compute_instance_group_manager" "mig" {
 }
 resource "google_compute_target_pool" "exam" {
   name = "exam-pool"
-  region = "us-central1"
+  region = "europe-west1"
   health_checks = [google_compute_http_health_check.default.name,]
 }
 ##############################################################################################
