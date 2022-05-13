@@ -86,7 +86,7 @@ resource "google_compute_region_backend_service" "default" {
   protocol              = "HTTP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
   timeout_sec           = 10
-  #health_checks         = [google_compute_http_health_check.default.id]
+  health_checks         = [google_compute_http_health_check.default.id]
   backend {
     group           = google_compute_instance_group_manager.mig.instance_group
     balancing_mode  = "UTILIZATION"
