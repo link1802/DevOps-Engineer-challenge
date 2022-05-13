@@ -53,7 +53,7 @@ resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
   region                = "us-central1"
   depends_on            = [google_compute_subnetwork.exam-proxy-subnet]
   ip_protocol           = "TCP"
-  load_balancing_scheme = "INTERNAL_MANAGED"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
   port_range            = "80"
   target                = google_compute_region_target_http_proxy.default.id
   network               = google_compute_network.exam-network.id
@@ -92,7 +92,7 @@ resource "google_compute_region_backend_service" "default" {
   provider              = google-beta
   region                = "us-central1"
   protocol              = "HTTP"
-  load_balancing_scheme = "INTERNAL_MANAGED"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
   timeout_sec           = 10
   health_checks         = [google_compute_region_health_check.default.id]
   backend {
