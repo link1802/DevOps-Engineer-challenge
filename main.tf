@@ -117,6 +117,11 @@ resource "google_compute_instance_group_manager" "mig" {
   base_instance_name = "exam"
 
 }
+resource "google_compute_target_pool" "exam" {
+  name = "exam-pool"
+  region = "us-central1"
+  health_checks = [google_compute_http_health_check.default.name,]
+}
 ##############################################################################################
 resource "google_compute_instance_template" "exam" {
   name           = "instance-template-1"
