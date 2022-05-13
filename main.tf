@@ -135,6 +135,7 @@ resource "google_compute_instance_template" "exam" {
   can_ip_forward = true
 
   network_interface {
+    network = google_compute_network.exam-network.id
     subnetwork = google_compute_subnetwork.exam-subnet.id
   }
 
