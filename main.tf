@@ -18,7 +18,7 @@ resource "google_compute_address" "static" {
   name = "ipv4-address"
   region = "us-central1"
 }
-
+################################################################################################
 # VPC network
 resource "google_compute_network" "exam-network" {
   name                    = "exam-network"
@@ -46,6 +46,53 @@ resource "google_compute_subnetwork" "exam-subnet" {
   network       = google_compute_network.exam-network.id
 }
 
+# forwarding rule
+resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
+  name                  = "exam-forwarding-rule"
+  provider              = google-beta
+  region                = "us-central1"
+  depends_on            = [google_compute_subnetwork.proxy_subnet]
+  ip_protocol           = "TCP"
+  load_balancing_scheme = "INTERNAL_MANAGED"
+  port_range            = "80"
+  target                = google_compute_region_target_http_proxy.default.id
+  network               = google_compute_network.ilb_network.id
+  subnetwork            = google_compute_subnetwork.ilb_subnet.id
+  network_tier          = "STANDARD"
+}
+
+# HTTP target proxy
+resource "google_compute_region_target_http_proxy" "default" {
+  name     = "exam-target-http-proxy"
+  provider = google-beta
+  region   = "us-central1"
+  url_map  = google_compute_region_url_map.default.id
+}
+
+# URL map
+resource "google_compute_region_url_map" "default" {
+  name            = "exam-regional-url-map"
+  provider        = google-beta
+  region          = "us-central1"
+  default_service = google_compute_region_backend_service.default.id
+}
+
+# backend service
+resource "google_compute_region_backend_service" "default" {
+  name                  = "exam-backend-subnet"
+  provider              = google-beta
+  region                = "us-central1"
+  protocol              = "HTTP"
+  load_balancing_scheme = "INTERNAL_MANAGED"
+  timeout_sec           = 10
+  health_checks         = [google_compute_region_health_check.default.id]
+  backend {
+    group           = google_compute_region_instance_group_manager.mig.instance_group
+    balancing_mode  = "UTILIZATION"
+    capacity_scaler = 1.0
+  }
+}
+##############################################################################################
 resource "google_compute_instance_template" "exam" {
   name           = "instance-template-1"
   machine_type   = "n2-standard-2"
