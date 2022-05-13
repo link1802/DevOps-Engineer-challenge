@@ -28,7 +28,7 @@ resource "google_compute_network" "exam-network" {
 
 # proxy-only subnet
 resource "google_compute_subnetwork" "exam-proxy-subnet" {
-  name          = "exam-proxy-subnet"
+  name          = exam-proxy-subnet
   provider      = google-beta
   ip_cidr_range = "10.0.0.0/24"
   region        = "us-central1"
@@ -51,6 +51,11 @@ resource "google_compute_instance_template" "exam" {
   machine_type   = "n2-standard-2"
   can_ip_forward = false
 
+  network_interface {
+    network = "exam-network"
+    subnetwork = "exam-proxy-subnet"
+  }
+  
   disk {
     source_image = data.google_compute_image.debian_11.id
   }
