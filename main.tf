@@ -24,6 +24,13 @@ resource "google_compute_subnetwork" "ilb_subnet" {
   network       = google_compute_network.ilb_network.id
 }
 
+# URL map
+resource "google_compute_region_url_map" "default" {
+  name            = "l7-ilb-regional-url-map"
+  region          = "us-central1"
+  default_service = google_compute_region_backend_service.default.id
+}
+
 # HTTP target proxy
 resource "google_compute_region_target_http_proxy" "default" {
   name     = "l7-ilb-target-http-proxy"
@@ -45,12 +52,6 @@ resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
   network_tier          = "STANDARD"
 }
 
-# URL map
-resource "google_compute_region_url_map" "default" {
-  name            = "l7-ilb-regional-url-map"
-  region          = "us-central1"
-  default_service = google_compute_region_backend_service.default.id
-}
 
 # backend service
 resource "google_compute_region_backend_service" "default" {
