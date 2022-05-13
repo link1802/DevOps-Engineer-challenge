@@ -83,7 +83,7 @@ resource "google_compute_region_health_check" "default" {
   provider = google-beta
   region   = "us-central1"
   http_health_check {
-    port_specification = "80"
+    port_specification = "USE_SERVING_PORT"
   }
 }
 
