@@ -126,7 +126,7 @@ resource "google_compute_instance_group_manager" "mig" {
 resource "google_compute_target_pool" "exam" {
   name = "exam-pool"
   region = "us-central1"
-  #health_checks = [google_compute_http_health_check.default.name,]
+  health_checks = [google_compute_http_health_check.default.name,]
 }
 ##############################################################################################
 resource "google_compute_instance_template" "exam" {
@@ -135,7 +135,6 @@ resource "google_compute_instance_template" "exam" {
   can_ip_forward = true
 
   network_interface {
-    network = google_compute_network.exam-network.id
     subnetwork = google_compute_subnetwork.exam-subnet.id
   }
 
@@ -148,16 +147,6 @@ resource "google_compute_instance_template" "exam" {
   }
 
 metadata_startup_script = file("${path.module}/template/install_nginx.sh")
-}
-
-resource "google_compute_http_health_check" "default" {
-  name         = "authentication-health-check"
-  request_path = "/health_check"
-  http_health_check {
-    port_specification = "USE_SERVING_PORT"
-  }
-  timeout_sec        = 1
-  check_interval_sec = 1
 }
 
 resource "google_compute_http_health_check" "default" {
