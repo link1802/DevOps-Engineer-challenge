@@ -24,6 +24,13 @@ resource "google_compute_subnetwork" "ilb_subnet" {
   network       = google_compute_network.ilb_network.id
 }
 
+# HTTP target proxy
+resource "google_compute_region_target_http_proxy" "default" {
+  name     = "l7-ilb-target-http-proxy"
+  region   = "us-central1"
+  url_map  = google_compute_region_url_map.default.id
+}
+
 # forwarding rule
 resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
   name                  = "l7-ilb-forwarding-rule"
@@ -32,17 +39,10 @@ resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
   ip_protocol           = "TCP"
   load_balancing_scheme = "INTERNAL_MANAGED"
   port_range            = "80"
-  target                = google_compute_region_target_http_proxy.proxy_subnet.id
+  target                = google_compute_region_target_http_proxy.default.id
   network               = google_compute_network.ilb_network.id
   subnetwork            = google_compute_subnetwork.ilb_subnet.id
   network_tier          = "STANDARD"
-}
-
-# HTTP target proxy
-resource "google_compute_region_target_http_proxy" "default" {
-  name     = "l7-ilb-target-http-proxy"
-  region   = "us-central1"
-  url_map  = google_compute_region_url_map.default.id
 }
 
 # URL map
