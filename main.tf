@@ -117,6 +117,11 @@ resource "google_compute_instance_group_manager" "mig" {
   target_pools       = [google_compute_target_pool.exam.id]
   base_instance_name = "exam"
 
+  named_port {
+    name = "HTTP"
+    port = 80
+  }
+
 }
 resource "google_compute_target_pool" "exam" {
   name = "exam-pool"
