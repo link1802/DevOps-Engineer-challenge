@@ -1,7 +1,7 @@
 resource "google_compute_autoscaler" "exam" {
   name   = "autocaler"
   zone   = "us-central1-a"
-  target = google_compute_instance_group_manager.exam.id
+  target = google_compute_instance_group_manager.mig.id
 
   autoscaling_policy {
     max_replicas    = 2
@@ -104,15 +104,25 @@ resource "google_compute_region_backend_service" "default" {
 
 # MIG
 resource "google_compute_region_instance_group_manager" "mig" {
-  name     = "exam-mig1"
+  #name     = "exam-mig1"
+  name = "group-skydrop"
   provider = google-beta
   region   = "us-central1"
+
   version {
-    instance_template = google_compute_instance_template.exam.id
-    name              = "primary"
+    instance_template  = google_compute_instance_template.exam.id
+    name               = "primary"
   }
-  base_instance_name = "vm"
-  target_size        = 2
+
+  target_pools       = [google_compute_target_pool.exam.id]
+  base_instance_name = "exam"
+
+  #version {
+  #  instance_template = google_compute_instance_template.exam.id
+  #  name              = "primary"
+  #}
+  #base_instance_name = "vm"
+  #target_size        = 2
 }
 ##############################################################################################
 resource "google_compute_instance_template" "exam" {
@@ -147,19 +157,6 @@ resource "google_compute_target_pool" "exam" {
   region = "us-central1"
   health_checks = [google_compute_http_health_check.default.name,]
 }
-resource "google_compute_instance_group_manager" "exam" {
-  name = "group-skydrop"
-  zone = "us-central1-a"
-
-  version {
-    instance_template  = google_compute_instance_template.exam.id
-    name               = "primary"
-  }
-
-  target_pools       = [google_compute_target_pool.exam.id]
-  base_instance_name = "exam"
-}
-
 
 data "google_compute_image" "debian_11" {
   family  = "debian-11"
