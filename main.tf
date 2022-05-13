@@ -108,7 +108,7 @@ resource "google_compute_region_instance_group_manager" "mig" {
   provider = google-beta
   region   = "us-central1"
   version {
-    instance_template = google_compute_instance_template.instance_template.id
+    instance_template = google_compute_instance_template.exam.id
     name              = "primary"
   }
   base_instance_name = "vm"
