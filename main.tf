@@ -118,7 +118,7 @@ resource "google_compute_instance_group_manager" "mig" {
   base_instance_name = "exam"
 
   named_port {
-    name = "HTTP"
+    name = "http"
     port = 80
   }
 
