@@ -11,7 +11,7 @@ resource "google_compute_subnetwork" "proxy_subnet" {
   name          = "l7-ilb-proxy-subnet"
   ip_cidr_range = "10.0.0.0/24"
   region        = "us-central1"
-  purpose       = "INTERNAL_HTTP_LOAD_BALANCER"
+  purpose       = "PRIVATE"
   role          = "ACTIVE"
   network       = google_compute_network.ilb_network.id
 }
