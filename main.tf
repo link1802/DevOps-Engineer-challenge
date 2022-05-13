@@ -132,7 +132,7 @@ resource "google_compute_target_pool" "exam" {
 resource "google_compute_instance_template" "exam" {
   name           = "instance-template-1"
   machine_type   = "n2-standard-2"
-  can_ip_forward = false
+  can_ip_forward = true
 
   network_interface {
     subnetwork = google_compute_subnetwork.exam-subnet.id
