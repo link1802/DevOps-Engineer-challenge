@@ -28,7 +28,7 @@ resource "google_compute_network" "exam-network" {
 
 # proxy-only subnet
 resource "google_compute_subnetwork" "exam-proxy-subnet" {
-  name          = exam-proxy-subnet
+  name          = "exam-proxy-subnet"
   provider      = google-beta
   ip_cidr_range = "10.0.0.0/24"
   region        = "us-central1"
