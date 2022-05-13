@@ -78,14 +78,14 @@ resource "google_compute_region_url_map" "default" {
   default_service = google_compute_region_backend_service.default.id
 }
 
-resource "google_compute_region_health_check" "default" {
-  name     = "exam-hc"
-  provider = google-beta
-  region   = "us-central1"
-  http_health_check {
-    port_specification = "USE_SERVING_PORT"
-  }
-}
+#resource "google_compute_region_health_check" "default" {
+#  name     = "exam-hc"
+#  provider = google-beta
+#  region   = "us-central1"
+#  http_health_check {
+#    port_specification = "USE_SERVING_PORT"
+#  }
+#}
 
 # backend service
 resource "google_compute_region_backend_service" "default" {
@@ -95,7 +95,7 @@ resource "google_compute_region_backend_service" "default" {
   protocol              = "HTTP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
   timeout_sec           = 10
-  health_checks         = [google_compute_region_health_check.default.id]
+  #health_checks         = [google_compute_region_health_check.default.id]
   backend {
     group           = google_compute_instance_group_manager.mig.instance_group
     balancing_mode  = "UTILIZATION"
@@ -126,7 +126,7 @@ resource "google_compute_instance_group_manager" "mig" {
 resource "google_compute_target_pool" "exam" {
   name = "exam-pool"
   region = "us-central1"
-  health_checks = [google_compute_http_health_check.default.name,]
+  #health_checks = [google_compute_http_health_check.default.name,]
 }
 ##############################################################################################
 resource "google_compute_instance_template" "exam" {
@@ -150,15 +150,15 @@ resource "google_compute_instance_template" "exam" {
 metadata_startup_script = file("${path.module}/template/install_nginx.sh")
 }
 
-resource "google_compute_http_health_check" "default" {
-  name         = "authentication-health-check"
-  request_path = "/health_check"
-  http_health_check {
-    port_specification = "USE_SERVING_PORT"
-  }
-  timeout_sec        = 1
-  check_interval_sec = 1
-}
+#resource "google_compute_http_health_check" "default" {
+#  name         = "authentication-health-check"
+#  request_path = "/health_check"
+#  http_health_check {
+#    port_specification = "USE_SERVING_PORT"
+#  }
+#  timeout_sec        = 1
+#  check_interval_sec = 1
+#}
 
 data "google_compute_image" "debian_11" {
   family  = "debian-11"
