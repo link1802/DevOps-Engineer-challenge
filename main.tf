@@ -52,10 +52,9 @@ resource "google_compute_instance_template" "exam" {
   can_ip_forward = false
 
   network_interface {
-    network = "exam-network"
-    subnetwork = "exam-proxy-subnet"
+    subnetwork = google_compute_subnetwork.exam-proxy-subnet.id
   }
-  
+
   disk {
     source_image = data.google_compute_image.debian_11.id
   }
