@@ -135,7 +135,7 @@ resource "google_compute_instance_template" "exam" {
   can_ip_forward = false
 
   network_interface {
-    subnetwork = google_compute_subnetwork.exam-proxy-subnet.id
+    #subnetwork = google_compute_subnetwork.exam-proxy-subnet.id
   }
 
   disk {
