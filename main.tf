@@ -47,6 +47,14 @@ resource "google_compute_subnetwork" "exam-subnet" {
   network       = google_compute_network.exam-network.id
 }
 
+# HTTP target proxy
+resource "google_compute_region_target_http_proxy" "default" {
+  name     = "exam-target-http-proxy"
+  provider = google-beta
+  region   = "europe-west1"
+  url_map  = google_compute_region_url_map.default.id
+}
+
 # forwarding rule
 resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
   name                  = "exam-forwarding-rule"
@@ -60,14 +68,6 @@ resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
   #network               = google_compute_network.exam-network.id
   #subnetwork            = google_compute_subnetwork.exam-subnet.id
   network_tier          = "STANDARD"
-}
-
-# HTTP target proxy
-resource "google_compute_region_target_http_proxy" "default" {
-  name     = "exam-target-http-proxy"
-  provider = google-beta
-  region   = "europe-west1"
-  url_map  = google_compute_region_url_map.default.id
 }
 
 # URL map
