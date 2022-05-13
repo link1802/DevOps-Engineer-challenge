@@ -91,7 +91,7 @@ resource "google_compute_region_backend_service" "default" {
   name                  = "exam-backend-subnet"
   provider              = google-beta
   region                = "us-central1"
-  protocol              = "HTTP"
+  protocol              = "TCP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
   timeout_sec           = 10
   health_checks         = [google_compute_region_health_check.default.id]
