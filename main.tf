@@ -53,12 +53,12 @@ resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
   region                = "us-central1"
   depends_on            = [google_compute_subnetwork.exam-proxy-subnet]
   ip_protocol           = "TCP"
-  load_balancing_scheme = "INTERNAL_MANAGED"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
   port_range            = "80"
   target                = google_compute_region_target_http_proxy.default.id
   network               = google_compute_network.exam-network.id
   subnetwork            = google_compute_subnetwork.exam-subnet.id
-  network_tier          = "PREMIUM"
+  network_tier          = "STANDARD"
 }
 
 # HTTP target proxy
@@ -143,12 +143,6 @@ resource "google_compute_http_health_check" "default" {
   request_path       = "/"
   check_interval_sec = 1
   timeout_sec        = 1
-}
-
-resource "google_compute_target_pool" "exam" {
-  name = "exam-pool"
-  region = "us-central1"
-  health_checks = [google_compute_http_health_check.default.name,]
 }
 
 data "google_compute_image" "debian_11" {
