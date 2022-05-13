@@ -144,9 +144,9 @@ metadata_startup_script = file("${path.module}/template/install_nginx.sh")
 resource "google_compute_http_health_check" "default" {
   name         = "authentication-health-check"
   request_path = "/health_check"
-  http_health_check {
-    port_specification = "USE_SERVING_PORT"
-  }
+  #http_health_check {
+  #  port_specification = "USE_SERVING_PORT"
+  #}
   timeout_sec        = 10
   check_interval_sec = 10
 }
