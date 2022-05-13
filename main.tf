@@ -150,17 +150,16 @@ resource "google_compute_instance_template" "exam" {
 metadata_startup_script = file("${path.module}/template/install_nginx.sh")
 }
 
-<<<<<<< HEAD
-#resource "google_compute_http_health_check" "default" {
-#  name         = "authentication-health-check"
-#  request_path = "/health_check"
-#  http_health_check {
-#    port_specification = "USE_SERVING_PORT"
-#  }
-#  timeout_sec        = 1
-#  check_interval_sec = 1
-#}
-=======
+resource "google_compute_http_health_check" "default" {
+  name         = "authentication-health-check"
+  request_path = "/health_check"
+  http_health_check {
+    port_specification = "USE_SERVING_PORT"
+  }
+  timeout_sec        = 1
+  check_interval_sec = 1
+}
+
 resource "google_compute_http_health_check" "default" {
   name         = "authentication-health-check"
   request_path = "/health_check"
@@ -168,7 +167,6 @@ resource "google_compute_http_health_check" "default" {
   timeout_sec        = 1
   check_interval_sec = 1
 }
->>>>>>> parent of 4b57cc7 (Update main.tf)
 
 data "google_compute_image" "debian_11" {
   family  = "debian-11"
