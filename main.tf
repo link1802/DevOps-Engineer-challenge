@@ -133,7 +133,7 @@ resource "google_compute_instance_template" "exam" {
   name           = "instance-template-1"
   machine_type   = "n2-standard-2"
   can_ip_forward = true
-  tags = ["allow-health-check"]
+
   network_interface {
     network = google_compute_network.exam-network.id
     subnetwork = google_compute_subnetwork.exam-subnet.id
@@ -150,6 +150,7 @@ resource "google_compute_instance_template" "exam" {
 metadata_startup_script = file("${path.module}/template/install_nginx.sh")
 }
 
+<<<<<<< HEAD
 #resource "google_compute_http_health_check" "default" {
 #  name         = "authentication-health-check"
 #  request_path = "/health_check"
@@ -159,6 +160,15 @@ metadata_startup_script = file("${path.module}/template/install_nginx.sh")
 #  timeout_sec        = 1
 #  check_interval_sec = 1
 #}
+=======
+resource "google_compute_http_health_check" "default" {
+  name         = "authentication-health-check"
+  request_path = "/health_check"
+
+  timeout_sec        = 1
+  check_interval_sec = 1
+}
+>>>>>>> parent of 4b57cc7 (Update main.tf)
 
 data "google_compute_image" "debian_11" {
   family  = "debian-11"
