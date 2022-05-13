@@ -17,6 +17,7 @@ resource "google_compute_autoscaler" "exam" {
 resource "google_compute_address" "static" {
   name = "ipv4-address"
   region = "us-central1"
+  network_tier = "STANDARD"
 }
 ################################################################################################
 # VPC network
