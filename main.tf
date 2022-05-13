@@ -40,6 +40,7 @@ resource "google_compute_region_target_http_proxy" "default" {
 
 # forwarding rule
 resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
+  provider = google-beta
   name                  = "l7-ilb-forwarding-rule"
   region                = "us-central1"
   depends_on            = [google_compute_subnetwork.proxy_subnet]
