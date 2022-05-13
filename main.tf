@@ -77,6 +77,15 @@ resource "google_compute_region_url_map" "default" {
   default_service = google_compute_region_backend_service.default.id
 }
 
+resource "google_compute_region_health_check" "default" {
+  name     = "exam-hc"
+  provider = google-beta
+  region   = "us-central1"
+  http_health_check {
+    port_specification = "USE_SERVING_PORT"
+  }
+}
+
 # backend service
 resource "google_compute_region_backend_service" "default" {
   name                  = "exam-backend-subnet"
