@@ -1,6 +1,6 @@
 resource "google_compute_autoscaler" "exam" {
   name   = "autocaler"
-  zone   = "europe-west1-a"
+  zone   = "europe-west1-b"
   target = google_compute_instance_group_manager.mig.id
 
   autoscaling_policy {
@@ -107,7 +107,7 @@ resource "google_compute_region_backend_service" "default" {
 resource "google_compute_instance_group_manager" "mig" {
   name = "group-skydrop"
   provider = google-beta
-  zone = "europe-west1-a"
+  zone = "europe-west1-b"
 
   version {
     instance_template  = google_compute_instance_template.exam.id
