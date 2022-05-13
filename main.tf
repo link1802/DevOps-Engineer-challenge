@@ -107,6 +107,7 @@ resource "google_compute_region_instance_group_manager" "mig" {
   name = "group-skydrop"
   provider = google-beta
   region   = "us-central1"
+  zone = "us-central1-a"
 
   version {
     instance_template  = google_compute_instance_template.exam.id
