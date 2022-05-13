@@ -104,7 +104,6 @@ resource "google_compute_region_backend_service" "default" {
 
 # MIG
 resource "google_compute_region_instance_group_manager" "mig" {
-  #name     = "exam-mig1"
   name = "group-skydrop"
   provider = google-beta
   region   = "us-central1"
@@ -117,12 +116,6 @@ resource "google_compute_region_instance_group_manager" "mig" {
   target_pools       = [google_compute_target_pool.exam.id]
   base_instance_name = "exam"
 
-  #version {
-  #  instance_template = google_compute_instance_template.exam.id
-  #  name              = "primary"
-  #}
-  #base_instance_name = "vm"
-  #target_size        = 2
 }
 ##############################################################################################
 resource "google_compute_instance_template" "exam" {
