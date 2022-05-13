@@ -80,7 +80,6 @@ resource "google_compute_region_url_map" "default" {
 
 resource "google_compute_region_health_check" "default" {
   name     = "exam-hc"
-  request_path = "/health_check"
   provider = google-beta
   region   = "us-central1"
   http_health_check {
