@@ -96,10 +96,23 @@ resource "google_compute_region_backend_service" "default" {
   timeout_sec           = 10
   health_checks         = [google_compute_region_health_check.default.id]
   backend {
-    group           = google_compute_instance_group_manager.exam
+    group           = google_compute_region_instance_group_manager.mig.instance_group
     balancing_mode  = "UTILIZATION"
     capacity_scaler = 1.0
   }
+}
+
+# MIG
+resource "google_compute_region_instance_group_manager" "mig" {
+  name     = "exam-mig1"
+  provider = google-beta
+  region   = "us-central1"
+  version {
+    instance_template = google_compute_instance_template.instance_template.id
+    name              = "primary"
+  }
+  base_instance_name = "vm"
+  target_size        = 2
 }
 ##############################################################################################
 resource "google_compute_instance_template" "exam" {
