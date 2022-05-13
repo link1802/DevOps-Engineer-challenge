@@ -150,10 +150,11 @@ metadata_startup_script = file("${path.module}/template/install_nginx.sh")
 }
 
 resource "google_compute_http_health_check" "default" {
-  name               = "default"
-  request_path       = "/"
-  check_interval_sec = 1
+  name         = "authentication-health-check"
+  request_path = "/health_check"
+
   timeout_sec        = 1
+  check_interval_sec = 1
 }
 
 data "google_compute_image" "debian_11" {
