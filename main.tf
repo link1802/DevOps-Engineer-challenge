@@ -3,15 +3,17 @@
 # VPC network
 resource "google_compute_network" "ilb_network" {
   name                    = "l7-ilb-network"
+  provider                = google-beta
   auto_create_subnetworks = false
 }
 
 # proxy-only subnet
 resource "google_compute_subnetwork" "proxy_subnet" {
   name          = "l7-ilb-proxy-subnet"
+  provider      = google-beta
   ip_cidr_range = "10.0.0.0/24"
-  region        = "us-central1"
-  purpose       = "PRIVATE"
+  region        = "europe-west1"
+  purpose       = "INTERNAL_HTTPS_LOAD_BALANCER"
   role          = "ACTIVE"
   network       = google_compute_network.ilb_network.id
 }
@@ -19,30 +21,17 @@ resource "google_compute_subnetwork" "proxy_subnet" {
 # backend subnet
 resource "google_compute_subnetwork" "ilb_subnet" {
   name          = "l7-ilb-subnet"
+  provider      = google-beta
   ip_cidr_range = "10.0.1.0/24"
-  region        = "us-central1"
+  region        = "europe-west1"
   network       = google_compute_network.ilb_network.id
-}
-
-# URL map
-resource "google_compute_region_url_map" "default" {
-  name            = "l7-ilb-regional-url-map"
-  region          = "us-central1"
-  default_service = google_compute_region_backend_service.default.id
-}
-
-# HTTP target proxy
-resource "google_compute_region_target_http_proxy" "default" {
-  name     = "l7-ilb-target-http-proxy"
-  region   = "us-central1"
-  url_map  = google_compute_region_url_map.default.id
 }
 
 # forwarding rule
 resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
-  provider = google-beta
   name                  = "l7-ilb-forwarding-rule"
-  region                = "us-central1"
+  provider              = google-beta
+  region                = "europe-west1"
   depends_on            = [google_compute_subnetwork.proxy_subnet]
   ip_protocol           = "TCP"
   load_balancing_scheme = "INTERNAL_MANAGED"
@@ -50,14 +39,30 @@ resource "google_compute_forwarding_rule" "google_compute_forwarding_rule" {
   target                = google_compute_region_target_http_proxy.default.id
   network               = google_compute_network.ilb_network.id
   subnetwork            = google_compute_subnetwork.ilb_subnet.id
-  network_tier          = "STANDARD"
+  network_tier          = "PREMIUM"
 }
 
+# HTTP target proxy
+resource "google_compute_region_target_http_proxy" "default" {
+  name     = "l7-ilb-target-http-proxy"
+  provider = google-beta
+  region   = "europe-west1"
+  url_map  = google_compute_region_url_map.default.id
+}
+
+# URL map
+resource "google_compute_region_url_map" "default" {
+  name            = "l7-ilb-regional-url-map"
+  provider        = google-beta
+  region          = "europe-west1"
+  default_service = google_compute_region_backend_service.default.id
+}
 
 # backend service
 resource "google_compute_region_backend_service" "default" {
   name                  = "l7-ilb-backend-subnet"
-  region                = "us-central1"
+  provider              = google-beta
+  region                = "europe-west1"
   protocol              = "HTTP"
   load_balancing_scheme = "INTERNAL_MANAGED"
   timeout_sec           = 10
@@ -72,6 +77,7 @@ resource "google_compute_region_backend_service" "default" {
 # instance template
 resource "google_compute_instance_template" "instance_template" {
   name         = "l7-ilb-mig-template"
+  provider     = google-beta
   machine_type = "e2-small"
   tags         = ["http-server"]
 
@@ -119,7 +125,8 @@ resource "google_compute_instance_template" "instance_template" {
 # health check
 resource "google_compute_region_health_check" "default" {
   name     = "l7-ilb-hc"
-  region   = "us-central1"
+  provider = google-beta
+  region   = "europe-west1"
   http_health_check {
     port_specification = "USE_SERVING_PORT"
   }
@@ -128,7 +135,8 @@ resource "google_compute_region_health_check" "default" {
 # MIG
 resource "google_compute_region_instance_group_manager" "mig" {
   name     = "l7-ilb-mig1"
-  region   = "us-central1"
+  provider = google-beta
+  region   = "europe-west1"
   version {
     instance_template = google_compute_instance_template.instance_template.id
     name              = "primary"
@@ -140,6 +148,7 @@ resource "google_compute_region_instance_group_manager" "mig" {
 # allow all access from IAP and health check ranges
 resource "google_compute_firewall" "fw-iap" {
   name          = "l7-ilb-fw-allow-iap-hc"
+  provider      = google-beta
   direction     = "INGRESS"
   network       = google_compute_network.ilb_network.id
   source_ranges = ["130.211.0.0/22", "35.191.0.0/16", "35.235.240.0/20"]
@@ -151,6 +160,7 @@ resource "google_compute_firewall" "fw-iap" {
 # allow http from proxy subnet to backends
 resource "google_compute_firewall" "fw-ilb-to-backends" {
   name          = "l7-ilb-fw-allow-ilb-to-backends"
+  provider      = google-beta
   direction     = "INGRESS"
   network       = google_compute_network.ilb_network.id
   source_ranges = ["10.0.0.0/24"]
@@ -164,7 +174,8 @@ resource "google_compute_firewall" "fw-ilb-to-backends" {
 # test instance
 resource "google_compute_instance" "vm-test" {
   name         = "l7-ilb-test-vm"
-  zone         = "us-central1"
+  provider     = google-beta
+  zone         = "europe-west1-b"
   machine_type = "e2-small"
   network_interface {
     network    = google_compute_network.ilb_network.id
