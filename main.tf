@@ -1,7 +1,7 @@
 resource "google_compute_autoscaler" "exam" {
   name   = "autocaler"
   zone   = "us-central1-a"
-  target = google_compute_instance_group_manager.mig.id
+  target = google_compute_region_instance_group_manager.mig.id
 
   autoscaling_policy {
     max_replicas    = 2
