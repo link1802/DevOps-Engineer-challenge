@@ -126,10 +126,9 @@ resource "google_compute_instance_template" "instance_template" {
 resource "google_compute_region_health_check" "default" {
   depends_on = [google_compute_firewall.fw4]
   provider = google-beta
-
   region = "us-central1"
   name   = "website-hc"
-  http_health_check {
+  tcp_health_check {
     port = "80"
     response = "ok"
   }
