@@ -20,6 +20,7 @@ resource "google_compute_instance" "default" {
     }
   }
   metadata_startup_script = file("${path.module}/install_nginx.sh")
+
   lifecycle {
     ignore_changes = [attached_disk]
   }
@@ -28,5 +29,5 @@ resource "google_compute_instance" "default" {
 resource "google_compute_image" "default" {
   provider = google-beta
   name = "imagen-base"
-  source_disk = google_compute_instance.default.boot_disk[0].source
+  
 }
