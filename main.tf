@@ -6,7 +6,7 @@ resource "google_compute_forwarding_rule" "default" {
   region = "us-central1"
 
   ip_protocol           = "TCP"
-  load_balancing_scheme = "EXTERNAL"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
   port_range            = "80"
   target                = google_compute_region_target_http_proxy.default.id
   network               = google_compute_network.default.id
@@ -33,7 +33,7 @@ resource "google_compute_region_url_map" "default" {
 resource "google_compute_region_backend_service" "default" {
   provider = google-beta
 
-  load_balancing_scheme = "EXTERNAL"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
 
   backend {
     group = google_compute_region_instance_group_manager.rigm.instance_group
