@@ -19,4 +19,5 @@ resource "google_compute_instance" "default" {
       network_tier = "STANDARD"
     }
   }
+  metadata_startup_script = file("${path.module}/install_nginx.sh")
 }
