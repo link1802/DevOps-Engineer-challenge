@@ -131,6 +131,8 @@ resource "google_compute_region_health_check" "default" {
   name   = "website-hc"
   http_health_check {
     port = "80"
+    request = "/"
+    response = "ok"
   }
 }
 
