@@ -45,7 +45,7 @@ resource "google_compute_instance_template" "instance_template" {
   }
 
   disk {
-    source_image = data.google_compute_image.default.self_link
+    source_image = google_compute_image.default.self_link
     auto_delete  = true
     boot         = true
   }
