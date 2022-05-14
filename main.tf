@@ -100,7 +100,7 @@ resource "google_compute_instance_group_manager" "rigm" {
     port = 80
   }
   base_instance_name = "internal-glb"
-  target_size        = 1
+  target_size        = 2
 }
 
 resource "google_compute_instance_template" "instance_template" {
