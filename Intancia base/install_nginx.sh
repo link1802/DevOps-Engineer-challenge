@@ -15,4 +15,4 @@
       </body>
       </html>
       EOF1
-shutdown
+shutdown -n now
