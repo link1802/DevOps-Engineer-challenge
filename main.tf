@@ -72,7 +72,7 @@ resource "google_compute_region_backend_service" "default" {
   load_balancing_scheme = "EXTERNAL_MANAGED"
 
   backend {
-    group = google_compute_region_instance_group_manager.rigm.instance_group
+    group = google_compute_instance_group_manager.rigm.instance_group
     balancing_mode = "UTILIZATION"
     capacity_scaler = 1.0
   }
@@ -87,9 +87,9 @@ resource "google_compute_region_backend_service" "default" {
 
 
 
-resource "google_compute_region_instance_group_manager" "rigm" {
+resource "google_compute_instance_group_manager" "rigm" {
   provider = google-beta
-  region   = "us-central1"
+  zone = "us-central1-a"
   name     = "website-rigm"
   version {
     instance_template = google_compute_instance_template.instance_template.id
@@ -234,8 +234,7 @@ resource "google_compute_subnetwork" "proxy" {
 resource "google_compute_autoscaler" "default" {
   name   = "autoscaler"
   zone   = "us-central1-a"
-  target = google_compute_region_instance_group_manager.rigm.name
-
+  target = google_compute_instance_group_manager.rigm.id
   autoscaling_policy {
     max_replicas    = 5
     min_replicas    = 1
