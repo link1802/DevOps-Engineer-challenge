@@ -23,6 +23,6 @@ resource "google_compute_instance" "default" {
 
 resource "google_compute_image" "default" {
   name = "imagen-base"
-  source_disk = google_compute_instance.default.boot_disk.self_link
+  source_disk = google_compute_instance.default.boot_disk.source
   
 }
