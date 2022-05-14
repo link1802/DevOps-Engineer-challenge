@@ -51,7 +51,7 @@ resource "google_compute_region_backend_service" "default" {
 
 data "google_compute_image" "debian_image" {
   provider = google-beta
-  family   = "debian-9"
+  family   = "debian-11"
   project  = "debian-cloud"
 }
 
@@ -74,7 +74,7 @@ resource "google_compute_region_instance_group_manager" "rigm" {
 resource "google_compute_instance_template" "instance_template" {
   provider     = google-beta
   name         = "template-website-backend"
-  machine_type = "e2-medium"
+  machine_type = "e2-micro"
 
   network_interface {
     network = google_compute_network.default.id
@@ -87,7 +87,8 @@ resource "google_compute_instance_template" "instance_template" {
     boot         = true
   }
   metadata_startup_script = file("${path.module}/template/install_nginx.sh")
-  tags = ["allow-ssh", "load-balanced-backend"]
+
+  tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
 }
 
 resource "google_compute_region_health_check" "default" {
