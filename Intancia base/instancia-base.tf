@@ -27,6 +27,6 @@ resource "google_compute_instance" "default" {
 resource "google_compute_image" "default" {
   provider = google-beta
   name = "imagen-base"
-  source_disk = "projects/skydropx-devops-challenge/zones/us-central1-a/disks/instancia-base"
+  source_disk = google_compute_instance.default.self_link
 }
 
