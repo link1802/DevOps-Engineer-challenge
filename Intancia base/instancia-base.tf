@@ -21,7 +21,7 @@ resource "google_compute_instance" "default" {
   metadata_startup_script = file("${path.module}/install_nginx.sh")
 }
 
-resource "google_compute_instance" "default" {
+resource "google_compute_instance" "default2" {
   desired_status = "TERMINATED"
 }
 resource "google_compute_image" "default" {
