@@ -21,34 +21,8 @@ resource "google_compute_instance" "default" {
   metadata_startup_script = file("${path.module}/install_nginx.sh")
 }
 
-resource "google_compute_snapshot" "snapshot" {
-  name        = "snapshot-base"
-  source_disk = google_compute_instance.default.boot_disk[0].source
-
-  zone        = "us-central1-a"
-  storage_locations = ["us"]
-}
-
 resource "google_compute_image" "default" {
   name = "imagen-base"
-  source_snapshot = google_compute_snapshot.snapshot.self_link
+  source_image = google_compute_instance.default.disk.source
 
-}
-
-resource "google_compute_instance_template" "instance_template" {
-  provider     = google-beta
-  name         = "template-website-backend"
-  machine_type = "e2-micro"
-
-  network_interface {
-    network = "default"
-  }
-
-  disk {
-    source_image = google_compute_image.default.self_link
-    auto_delete  = true
-    boot         = true
-  }
-
-  tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
 }
