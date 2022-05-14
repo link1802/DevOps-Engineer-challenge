@@ -234,7 +234,7 @@ resource "google_compute_subnetwork" "proxy" {
 resource "google_compute_autoscaler" "default" {
   name   = "autoscaler"
   zone   = "us-central1-a"
-  target = google_compute_region_instance_group_manager.rigm.selfLink
+  target = google_compute_region_instance_group_manager.rigm.self_Link
 
   autoscaling_policy {
     max_replicas    = 5
