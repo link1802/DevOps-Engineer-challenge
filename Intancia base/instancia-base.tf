@@ -24,12 +24,13 @@ resource "google_compute_instance" "default" {
 resource "google_compute_snapshot" "snapshot" {
   name        = "snapshot-base"
   source_disk = google_compute_instance.default.boot_disk[0].source
+  
   zone        = "us-central1-a"
   storage_locations = ["us-central1"]
 }
 
 resource "google_compute_image" "default" {
   name = "imagen-base"
-  source_disk = google_compute_snapshot.snapshot.self_link
+  source-snapshot = google_compute_snapshot.snapshot.self_link
 
 }
