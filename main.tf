@@ -236,12 +236,12 @@ resource "google_compute_autoscaler" "default" {
   zone   = "us-central1-a"
   target = google_compute_instance_group_manager.rigm.id
   autoscaling_policy {
-    max_replicas    = 5
+    max_replicas    = 2
     min_replicas    = 1
     cooldown_period = 60
 
     cpu_utilization {
-      target = 0.5
+      target = 0.4
     }
   }
 }
