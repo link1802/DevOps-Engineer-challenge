@@ -11,7 +11,7 @@ resource "google_compute_forwarding_rule" "default" {
   target                = google_compute_region_target_http_proxy.default.id
   network               = google_compute_network.default.id
   subnetwork            = google_compute_subnetwork.default.id
-  network_tier          = "STANDAR"
+  network_tier          = "PREMIUM"
 }
 
 resource "google_compute_region_target_http_proxy" "default" {
