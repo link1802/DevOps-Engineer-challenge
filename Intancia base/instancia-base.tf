@@ -21,3 +21,9 @@ resource "google_compute_instance" "default" {
   }
   metadata_startup_script = file("${path.module}/install_nginx.sh")
 }
+
+resource "google_compute_machine_image" "image" {
+  provider        = google-beta
+  name            = "image-base"
+  source_instance = google_compute_instance.default.self_link
+}
