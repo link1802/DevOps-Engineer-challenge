@@ -4,14 +4,12 @@
  apt-get update -y
  apt-get install nginx -y
  rm /var/www/html/index.nginx-debian.html
- NAME=$(curl -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/hostname")
  IP=$(curl -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip")
  cat > /var/www/html/index.nginx-debian.html
  cat <<EOF1 > /var/www/html/index.nginx-debian.html
       <html>
       <body>
       <pre>
-      Name: $NAME
       IP: $IP
       </pre>
       </body>
