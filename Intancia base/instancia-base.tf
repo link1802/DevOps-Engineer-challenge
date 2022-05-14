@@ -5,12 +5,12 @@ resource "google_compute_instance" "default" {
 
   tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
 
-  disk {
-    source_image = data.google_compute_image.debian_image.self_link
-    auto_delete  = true
-    boot         = true
+  
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+    }
   }
-
   // Local SSD disk
   scratch_disk {
     interface = "SCSI"
@@ -22,11 +22,5 @@ resource "google_compute_instance" "default" {
     access_config {
       // Ephemeral public IP
     }
-  }
-
-  data "google_compute_image" "debian_image" {
-    provider = google-beta
-    family   = "debian-11"
-    project  = "debian-cloud"
   }
 }
