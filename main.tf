@@ -1,3 +1,39 @@
+resource "google_compute_instance" "default" {
+  name         = "instancia-base"
+  machine_type = "e2-micro"
+  zone         = "us-central1-a"
+  allow_stopping_for_update = true
+  tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
+  
+  
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+    }
+  }
+  
+  network_interface {
+    network = "default"
+
+    access_config {
+      network_tier = "STANDARD"
+    }
+  }
+  metadata_startup_script = file("${path.module}/install_nginx.sh")
+}
+
+resource "time_sleep" "w60s" {
+  depends_on = [google_compute_instance.default]
+
+  create_duration = "60s"
+}
+
+resource "google_compute_image" "default" {
+  depends_on = [time_sleep.w60s]
+  name = "imagen-base"
+  source_disk = google_compute_instance.default.boot_disk[0].source
+}
+///////////////////////////////////////////////////////////////////////////////////////
 // Forwarding rule for Regional External Load Balancing
 resource "google_compute_forwarding_rule" "default" {
   provider = google-beta
@@ -49,11 +85,7 @@ resource "google_compute_region_backend_service" "default" {
   health_checks = [google_compute_region_health_check.default.id]
 }
 
-data "google_compute_image" "debian_image" {
-  provider = google-beta
-  family   = "debian-11"
-  project  = "debian-cloud"
-}
+
 
 resource "google_compute_region_instance_group_manager" "rigm" {
   provider = google-beta
@@ -82,11 +114,11 @@ resource "google_compute_instance_template" "instance_template" {
   }
 
   disk {
-    source_image = data.google_compute_image.debian_image.self_link
+    source_image = data.google_compute_image.default.self_link
     auto_delete  = true
     boot         = true
   }
-  metadata_startup_script = file("${path.module}/template/install_nginx.sh")
+  metadata_startup_script = file("${path.module}/config_ip_resp.sh")
 
   tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
 }
