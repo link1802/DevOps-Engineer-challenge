@@ -130,7 +130,6 @@ resource "google_compute_region_health_check" "default" {
   name   = "website-hc"
   tcp_health_check {
     port = "80"
-    response = "ok"
   }
 }
 
@@ -230,4 +229,20 @@ resource "google_compute_subnetwork" "proxy" {
   network       = google_compute_network.default.id
   purpose       = "REGIONAL_MANAGED_PROXY"
   role          = "ACTIVE"
+}
+
+resource "google_compute_autoscaler" "default" {
+  name   = "autoscaler"
+  zone   = "us-central1-a"
+  target = google_compute_region_instance_group_manager.rigm.id
+
+  autoscaling_policy {
+    max_replicas    = 5
+    min_replicas    = 1
+    cooldown_period = 60
+
+    cpu_utilization {
+      target = 0.5
+    }
+  }
 }
