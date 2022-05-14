@@ -2,7 +2,7 @@ resource "google_compute_instance" "default" {
   name         = "instancia-base"
   machine_type = "e2-micro"
   zone         = "us-central1-a"
-
+  desired_status = "TERMINATED"
   tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
 
   
@@ -22,8 +22,7 @@ resource "google_compute_instance" "default" {
   metadata_startup_script = file("${path.module}/install_nginx.sh")
 }
 
-resource "google_compute_machine_image" "image" {
-  provider        = google-beta
-  name            = "image-base"
-  source_instance = google_compute_instance.default.self_link
+resource "google_compute_image" "default" {
+  name = "imagen-base"
+  source_disk = "instancia-base"
 }
