@@ -5,7 +5,7 @@
  apt-get install ufw -y
  ufw allow 'Nginx HTTP'
  ufw allow 'SSH'
- ufw enable
+ ufw enable -y
  apt-get install nginx -y
 
  #NAME=$(curl -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/hostname")
