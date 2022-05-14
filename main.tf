@@ -33,7 +33,7 @@ resource "google_compute_region_url_map" "default" {
 resource "google_compute_region_backend_service" "default" {
   provider = google-beta
 
-  load_balancing_scheme = "EXTERNAL_MANAGED"
+  load_balancing_scheme = "INTERNAL_MANAGED"
 
   backend {
     group = google_compute_region_instance_group_manager.rigm.instance_group
