@@ -21,9 +21,4 @@ resource "google_compute_instance" "default" {
   metadata_startup_script = file("${path.module}/install_nginx.sh")
 }
 
-resource "google_compute_image" "default" {
-  name = "imagen-base"
-  source_disk = google_compute_instance.default.disk.source
-
-}
 
