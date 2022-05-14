@@ -16,7 +16,7 @@ resource "google_compute_instance" "default" {
     network = "default"
 
     access_config {
-      // Ephemeral public IP
+      network_tier = "STANDARD"
     }
   }
 }
