@@ -97,7 +97,7 @@ resource "google_compute_region_health_check" "default" {
   region = "us-central1"
   name   = "website-hc"
   http_health_check {
-    port_specification = "USE_SERVING_PORT"
+    port = "80"
   }
 }
 
