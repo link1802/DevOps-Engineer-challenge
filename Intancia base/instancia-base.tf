@@ -5,7 +5,7 @@ resource "google_compute_instance" "default" {
   tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
   
   
-  boot_disk {
+  disk {
     initialize_params {
       image = "debian-cloud/debian-11"
     }
