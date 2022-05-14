@@ -63,6 +63,10 @@ resource "google_compute_region_instance_group_manager" "rigm" {
     instance_template = google_compute_instance_template.instance_template.id
     name              = "primary"
   }
+  named_port {
+    name = "http"
+    port = 80
+  }
   base_instance_name = "internal-glb"
   target_size        = 1
 }
@@ -82,7 +86,7 @@ resource "google_compute_instance_template" "instance_template" {
     auto_delete  = true
     boot         = true
   }
-
+  metadata_startup_script = file("${path.module}/template/install_nginx.sh")
   tags = ["allow-ssh", "load-balanced-backend"]
 }
 
