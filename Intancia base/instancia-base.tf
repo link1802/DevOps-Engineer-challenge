@@ -2,6 +2,7 @@ resource "google_compute_instance" "default" {
   name         = "instancia-base"
   machine_type = "e2-micro"
   zone         = "us-central1-a"
+  allow_stopping_for_update = true
   tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
   
   
@@ -29,4 +30,3 @@ resource "google_compute_image" "default" {
   name = "imagen-base"
   source_disk = google_compute_instance.default.boot_disk[0].source
 }
-
