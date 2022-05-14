@@ -2,7 +2,6 @@ resource "google_compute_instance" "default" {
   name         = "instancia-base"
   machine_type = "e2-micro"
   zone         = "us-central1-a"
-  desired_status = "TERMINATED"
   tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
 
   

@@ -15,3 +15,4 @@
       </body>
       </html>
       EOF1
+shutdown
