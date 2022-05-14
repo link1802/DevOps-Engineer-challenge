@@ -19,6 +19,9 @@ resource "google_compute_instance" "default" {
     }
   }
   metadata_startup_script = file("${path.module}/install_nginx.sh")
+  lifecycle {
+    ignore_changes = [attached_disk]
+  }
 }
 
 resource "google_compute_image" "default" {
