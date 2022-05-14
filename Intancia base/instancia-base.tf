@@ -12,9 +12,7 @@ resource "google_compute_instance" "default" {
     }
   }
   // Local SSD disk
-  scratch_disk {
-    interface = "SCSI"
-  }
+  scratch_disk {}
 
   network_interface {
     network = "default"
