@@ -31,6 +31,6 @@ resource "google_compute_snapshot" "snapshot" {
 
 resource "google_compute_image" "default" {
   name = "imagen-base"
-  source-snapshot = google_compute_snapshot.snapshot.self_link
+  source_snapshot = google_compute_snapshot.snapshot.self_link
 
 }
