@@ -1,4 +1,4 @@
-// Forwarding rule for Internal Load Balancing
+// Forwarding rule for Regional External Load Balancing
 resource "google_compute_forwarding_rule" "default" {
   provider = google-beta
   depends_on = [google_compute_subnetwork.proxy]
@@ -6,12 +6,12 @@ resource "google_compute_forwarding_rule" "default" {
   region = "us-central1"
 
   ip_protocol           = "TCP"
-  load_balancing_scheme = "INTERNAL_MANAGED"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
   port_range            = "80"
   target                = google_compute_region_target_http_proxy.default.id
   network               = google_compute_network.default.id
-  subnetwork            = google_compute_subnetwork.default.id
-  network_tier          = "PREMIUM"
+  ip_address            = google_compute_address.default.id
+  network_tier          = "STANDARD"
 }
 
 resource "google_compute_region_target_http_proxy" "default" {
@@ -33,7 +33,7 @@ resource "google_compute_region_url_map" "default" {
 resource "google_compute_region_backend_service" "default" {
   provider = google-beta
 
-  load_balancing_scheme = "INTERNAL_MANAGED"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
 
   backend {
     group = google_compute_region_instance_group_manager.rigm.instance_group
@@ -93,8 +93,15 @@ resource "google_compute_region_health_check" "default" {
   region = "us-central1"
   name   = "website-hc"
   http_health_check {
-    port = "80"
+    port_specification = "USE_SERVING_PORT"
   }
+}
+
+resource "google_compute_address" "default" {
+  name = "website-ip-1"
+  provider = google-beta
+  region = "us-central1"
+  network_tier = "STANDARD"
 }
 
 resource "google_compute_firewall" "fw1" {
