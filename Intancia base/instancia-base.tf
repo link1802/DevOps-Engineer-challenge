@@ -23,7 +23,6 @@ resource "google_compute_instance" "default" {
 
 resource "google_compute_image" "default" {
   name = "imagen-base"
-  source_disk = "instancia-base"
-  //source-disk-zone = "us-central1-a"
-  //storage-location= "us"
+  source_disk = google_compute_instance.default.boot_disk.self_link
+  
 }
