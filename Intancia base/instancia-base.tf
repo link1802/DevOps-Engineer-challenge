@@ -24,7 +24,6 @@ resource "google_compute_instance" "default" {
 resource "google_compute_image" "default" {
   provider = google-beta
   name = "imagen-base"
-  source_disk = google_compute_instance.default.disk.source
-
+  source_disk = google_compute_image.default.self_link
 }
 
