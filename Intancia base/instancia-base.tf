@@ -34,3 +34,21 @@ resource "google_compute_image" "default" {
   source_snapshot = google_compute_snapshot.snapshot.self_link
 
 }
+
+resource "google_compute_instance_template" "instance_template" {
+  provider     = google-beta
+  name         = "template-website-backend"
+  machine_type = "e2-micro"
+
+  network_interface {
+    network = "default"
+  }
+
+  disk {
+    source_image = data.google_compute_image.default.self_link
+    auto_delete  = true
+    boot         = true
+  }
+
+  tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
+}
