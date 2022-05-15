@@ -1,74 +1,130 @@
-variable "region" {
-  default = "us-west1"
+# versions.tf
+
+terraform {
+  required_providers {
+    kind = {
+      source  = "kyma-incubator/kind"
+      version = "0.0.9"
+    }
+
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.5.0"
+    }
+
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.3.0"
+    }
+
+    null = {
+      source  = "hashicorp/null"
+      version = "3.1.0"
+    }
+  }
+
+  required_version = ">= 1.0.0"
+}
+# variables.tf
+
+variable "kind_cluster_name" {
+  type        = string
+  description = "The name of the cluster."
+  default     = "demo-local"
 }
 
-variable "zone" {
-  default = "us-west1-b"
+variable "kind_cluster_config_path" {
+  type        = string
+  description = "The location where this cluster's kubeconfig will be saved to."
+  default     = "~/.kube/config"
 }
 
-variable "network_name" {
-  default = "tf-gke-k8s"
+variable "ingress_nginx_helm_version" {
+  type        = string
+  description = "The Helm version for the nginx ingress controller."
+  default     = "4.0.6"
 }
 
-provider "google" {
-  region = "${var.region}"
+variable "ingress_nginx_namespace" {
+  type        = string
+  description = "The nginx ingress namespace (it will be created if needed)."
+  default     = "ingress-nginx"
+}
+# kind_cluster.tf
+
+provider "kind" {
 }
 
-resource "google_compute_network" "default" {
-  name                    = "${var.network_name}"
-  auto_create_subnetworks = false
+provider "kubernetes" {
+  config_path = pathexpand(var.kind_cluster_config_path)
 }
 
-resource "google_compute_subnetwork" "default" {
-  name                     = "${var.network_name}"
-  ip_cidr_range            = "10.127.0.0/20"
-  network                  = "${google_compute_network.default.self_link}"
-  region                   = "${var.region}"
-  private_ip_google_access = true
+resource "kind_cluster" "default" {
+  name            = var.kind_cluster_name
+  kubeconfig_path = pathexpand(var.kind_cluster_config_path)
+  wait_for_ready  = true
+
+  kind_config {
+    kind        = "Cluster"
+    api_version = "kind.x-k8s.io/v1alpha4"
+
+    node {
+      role = "control-plane"
+
+      kubeadm_config_patches = [
+        "kind: InitConfiguration\nnodeRegistration:\n  kubeletExtraArgs:\n    node-labels: \"ingress-ready=true\"\n"
+      ]
+      extra_port_mappings {
+        container_port = 80
+        host_port      = 80
+      }
+      extra_port_mappings {
+        container_port = 443
+        host_port      = 443
+      }
+    }
+
+    node {
+      role = "worker"
+    }
+  }
 }
+# nginx_ingress.tf
 
-data "google_client_config" "current" {}
-
-data "google_container_engine_versions" "default" {
-  location = "${var.zone}"
-}
-
-resource "google_container_cluster" "default" {
-  name               = "${var.network_name}"
-  location           = "${var.zone}"
-  initial_node_count = 3
-  min_master_version = "${data.google_container_engine_versions.default.latest_master_version}"
-  network            = "${google_compute_subnetwork.default.name}"
-  subnetwork         = "${google_compute_subnetwork.default.name}"
-
-  // Use legacy ABAC until these issues are resolved: 
-  //   https://github.com/mcuadros/terraform-provider-helm/issues/56
-  //   https://github.com/terraform-providers/terraform-provider-kubernetes/pull/73
-  enable_legacy_abac = true
-
-  // Wait for the GCE LB controller to cleanup the resources.
-  provisioner "local-exec" {
-    when    = destroy
-    command = "sleep 90"
+provider "helm" {
+  kubernetes {
+    config_path = pathexpand(var.kind_cluster_config_path)
   }
 }
 
-output network {
-  value = "${google_compute_subnetwork.default.network}"
+resource "helm_release" "ingress_nginx" {
+  name       = "ingress-nginx"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+  version    = var.ingress_nginx_helm_version
+
+  namespace        = var.ingress_nginx_namespace
+  create_namespace = true
+
+  values = [file("nginx_ingress_values.yaml")]
+
+  depends_on = [kind_cluster.default]
 }
 
-output subnetwork_name {
-  value = "${google_compute_subnetwork.default.name}"
-}
+resource "null_resource" "wait_for_ingress_nginx" {
+  triggers = {
+    key = uuid()
+  }
 
-output cluster_name {
-  value = "${google_container_cluster.default.name}"
-}
+  provisioner "local-exec" {
+    command = <<EOF
+      printf "\nWaiting for the nginx ingress controller...\n"
+      kubectl wait --namespace ${helm_release.ingress_nginx.namespace} \
+        --for=condition=ready pod \
+        --selector=app.kubernetes.io/component=controller \
+        --timeout=90s
+    EOF
+  }
 
-output cluster_region {
-  value = "${var.region}"
-}
-
-output cluster_zone {
-  value = "us-west1-b"
+  depends_on = [helm_release.ingress_nginx]
 }
