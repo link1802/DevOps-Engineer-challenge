@@ -70,5 +70,5 @@ output cluster_region {
 }
 
 output cluster_zone {
-  value = "${google_container_cluster.default.zone}"
+  value = "us-west1-b"
 }
