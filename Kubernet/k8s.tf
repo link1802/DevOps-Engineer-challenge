@@ -57,6 +57,9 @@ resource "kubernetes_replication_controller" "nginx" {
     }
 
     template {
+      metadata {
+      }
+
       container = {
         image = "nginx:latest"
         name  = "nginx"
