@@ -42,37 +42,56 @@ resource "kubernetes_service" "nginx" {
 }
 
 resource "kubernetes_replication_controller" "nginx" {
-  metadata {
-    name      = "nginx"
-    namespace = "${kubernetes_namespace.staging.metadata.0.name}"
-
+    metadata {
+    name = "terraform-example"
     labels = {
-      run = "nginx"
+      test = "MyExampleApp"
     }
   }
 
   spec {
     selector = {
-      run = "nginx"
+      test = "MyExampleApp"
     }
-
     template {
       metadata {
+        labels = {
+          test = "MyExampleApp"
+        }
+        annotations = {
+          "key1" = "value1"
+        }
       }
 
-      container = {
-        image = "nginx:latest"
-        name  = "nginx"
+      spec {
+        container {
+          image = "nginx:1.21.6"
+          name  = "example"
 
-        resources = {
-          limits = {
-            cpu    = "0.5"
-            memory = "512Mi"
+          liveness_probe {
+            http_get {
+              path = "/"
+              port = 80
+
+              http_header {
+                name  = "X-Custom-Header"
+                value = "Awesome"
+              }
+            }
+
+            initial_delay_seconds = 3
+            period_seconds        = 3
           }
 
-          requests = {
-            cpu    = "250m"
-            memory = "50Mi"
+          resources {
+            limits = {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
           }
         }
       }
