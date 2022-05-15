@@ -51,7 +51,7 @@ resource "kubernetes_replication_controller" "nginx" {
     }
   }
 
-  spec = {
+  spec {
     selector = {
       run = "nginx"
     }
