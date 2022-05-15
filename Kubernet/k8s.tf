@@ -43,23 +43,24 @@ resource "kubernetes_service" "nginx" {
 
 resource "kubernetes_replication_controller" "nginx" {
     metadata {
-    name = "terraform-example"
+    name = "nginx"
+    namespace = "${kubernetes_namespace.staging.metadata.0.name}"
     labels = {
-      test = "MyExampleApp"
+      run = "nginx"
     }
   }
 
   spec {
     selector = {
-      test = "MyExampleApp"
+      run = "nginx"
     }
     template {
       metadata {
         labels = {
-          test = "MyExampleApp"
+          
         }
         annotations = {
-          "key1" = "value1"
+          
         }
       }
 
