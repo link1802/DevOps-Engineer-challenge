@@ -48,7 +48,7 @@ resource "google_container_cluster" "default" {
 
   // Wait for the GCE LB controller to cleanup the resources.
   provisioner "local-exec" {
-    when    = "destroy"
+    when    = destroy
     command = "sleep 90"
   }
 }
