@@ -24,7 +24,7 @@ resource "kubernetes_service" "nginx" {
   }
 
   spec {
-    selector {
+    selector = {
       run = "nginx"
     }
 
