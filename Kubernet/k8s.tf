@@ -46,18 +46,18 @@ resource "kubernetes_replication_controller" "nginx" {
     name      = "nginx"
     namespace = "${kubernetes_namespace.staging.metadata.0.name}"
 
-    labels {
+    labels = {
       run = "nginx"
     }
   }
 
-  spec {
-    selector {
+  spec = {
+    selector = {
       run = "nginx"
     }
 
-    template {
-      container {
+    template = {
+      container = {
         image = "nginx:latest"
         name  = "nginx"
 
