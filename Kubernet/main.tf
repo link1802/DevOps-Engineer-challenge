@@ -27,7 +27,7 @@ terraform {
 locals {
   region               = "us-west2"
   org_id               = "skydropx-devops-challenge"
-  billing_account      = "6753-6079-2119-1468"
+  #billing_account      = "6753-6079-2119-1468"
   host_project_name    = "host-staging"
   service_project_name = "k8s-staging"
   host_project_id      = "${local.host_project_name}-${random_integer.int.result}"
@@ -43,7 +43,7 @@ locals {
 resource "google_project" "host-staging" {
   name                = local.host_project_name
   project_id          = local.host_project_id
-  billing_account     = local.billing_account
+  #billing_account     = local.billing_account
   org_id              = local.org_id
   auto_create_network = false
 }
@@ -52,7 +52,7 @@ resource "google_project" "host-staging" {
 resource "google_project" "k8s-staging" {
   name                = local.service_project_name
   project_id          = local.service_project_id
-  billing_account     = local.billing_account
+  #billing_account     = local.billing_account
   org_id              = local.org_id
   auto_create_network = false
 }
