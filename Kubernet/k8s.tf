@@ -99,7 +99,3 @@ resource "kubernetes_replication_controller" "nginx" {
     }
   }
 }
-
-output "load-balancer-ip" {
-  value = "${google_compute_address.default.address}"
-}
