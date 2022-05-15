@@ -30,7 +30,7 @@ resource "google_compute_subnetwork" "default" {
 data "google_client_config" "current" {}
 
 data "google_container_engine_versions" "default" {
-  zone = "${var.zone}"
+  location = "${var.zone}"
 }
 
 resource "google_container_cluster" "default" {
