@@ -117,9 +117,9 @@ resource "google_compute_router_nat" "mist_nat" {
 }
 ###############################################################################################
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_shared_vpc_host_project
-resource "google_compute_shared_vpc_host_project" "host" {
-  project = google_project.host-staging.number
-}
+#resource "google_compute_shared_vpc_host_project" "host" {
+#  project = google_project.host-staging.number
+#}
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_shared_vpc_service_project
 resource "google_compute_shared_vpc_service_project" "service" {
