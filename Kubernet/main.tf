@@ -1,5 +1,6 @@
 provider "kubernetes" {
-  host    = google_container_cluster.default.endpoint
+  #host    = google_container_cluster.default.endpoint
+  host    = "https://${data.google_container_cluster.default.endpoint}"
   token   = data.google_client_config.current.access_token
   client_certificate = base64decode(
     google_container_cluster.default.master_auth[0].client_certificate,
@@ -71,8 +72,8 @@ metadata {
 
       spec {
         container {
-          image = "nginx:1.21.6"
-          name  = "example"
+          image = "nginx:latest"
+          name  = "nginx"
 
           resources {
             limits = {
