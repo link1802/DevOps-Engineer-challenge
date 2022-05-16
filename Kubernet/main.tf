@@ -49,7 +49,7 @@ resource "kubernetes_deployment" "nginx" {
 metadata {
     name = "deployment"
     labels = {
-      run : "nginx"
+      run = "nginx"
     }
   }
 
@@ -58,7 +58,7 @@ metadata {
 
     selector {
       match_labels = {
-      #  run : "nginx"
+        run = "nginx"
       }
     }
 
