@@ -101,7 +101,7 @@ resource "google_compute_subnetwork" "private" {
 resource "google_compute_router" "router" {
   name    = "router"
   region  = local.region
-  project = local.host_project_id
+  #project = local.host_project_id
   network = google_compute_network.main.self_link
 }
 #########################################################################################################
