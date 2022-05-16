@@ -122,12 +122,12 @@ resource "google_compute_router_nat" "mist_nat" {
 #}
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_shared_vpc_service_project
-resource "google_compute_shared_vpc_service_project" "service" {
-  host_project    = local.host_project_id
-  service_project = local.service_project_id
-
-  depends_on = [google_compute_shared_vpc_host_project.host]
-}
+#resource "google_compute_shared_vpc_service_project" "service" {
+#  host_project    = local.host_project_id
+#  service_project = local.service_project_id
+#
+#  depends_on = [google_compute_shared_vpc_host_project.host]
+3}
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork_iam
 resource "google_compute_subnetwork_iam_binding" "binding" {
