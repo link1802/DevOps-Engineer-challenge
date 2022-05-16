@@ -117,7 +117,7 @@ resource "kubernetes_horizontal_pod_autoscaler" "nginxlb" {
     max_replicas = 2
 
     scale_target_ref {
-      kind = kubernetes_deployment.nginx.name
+      kind = "Deployment"
       name = "nginx"
     }
 
