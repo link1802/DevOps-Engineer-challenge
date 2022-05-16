@@ -30,7 +30,7 @@ resource "kubernetes_service" "nginx" {
 
   spec {
     selector = {
-      run = "nginx"
+      run = kubernetes_deployment.test.spec.0.template.0.metadata.0.labels.app
     }
 
     session_affinity = "ClientIP"
@@ -48,7 +48,8 @@ resource "kubernetes_service" "nginx" {
 
 resource "kubernetes_deployment" "nginx" {
 metadata {
-    name = "deployment"
+    name = "nginx"
+    namespace = kubernetes_namespace.staging.metadata.0.name
     labels = {
       run = "nginx"
     }
