@@ -1,5 +1,6 @@
 provider "google" {
-  version = "~> 3.90.1"
+
+  region      = "us-central1"
 }
 module "gke_auth" {
   source = "terraform-google-modules/kubernetes-engine/google//modules/auth"
