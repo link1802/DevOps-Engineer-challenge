@@ -1,11 +1,4 @@
-terraform {
-  required_providers {
-    google {
-      source = "hashicorp/google"
-      version = "~> 3.42.0"
-    }
-  }
-}
+
 module "gke_auth" {
   source = "terraform-google-modules/kubernetes-engine/google//modules/auth"
   depends_on   = [module.gke]
@@ -14,6 +7,7 @@ module "gke_auth" {
   cluster_name = module.gke.name
 }
 resource "local_file" "kubeconfig" {
+  provider = google-beta
   content  = module.gke_auth.kubeconfig_raw
   filename = "kubeconfig-${var.env_name}"
 }
