@@ -1,6 +1,4 @@
-provider "google" {
-  version = "< 5.0.0"
-}
+
 module "gke_auth" {
   source = "terraform-google-modules/kubernetes-engine/google//modules/auth"
   depends_on   = [module.gke]
