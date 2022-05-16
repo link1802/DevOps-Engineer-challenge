@@ -45,7 +45,7 @@ resource "kubernetes_service" "nginx" {
   }
 }
 
-resource "kubernetes_replication_controller" "nginx" {
+resource "kubernetes_deployment" "nginx" {
   metadata {
     name      = "nginx"
     namespace = kubernetes_namespace.staging.metadata[0].name
