@@ -60,8 +60,7 @@ resource "kubernetes_replication_controller" "nginx" {
       run = "nginx"
     }
 
-    spec {
-    
+    template {
       container {
         image = "nginx:latest"
         name  = "nginx"
