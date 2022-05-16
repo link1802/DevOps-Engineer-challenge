@@ -107,6 +107,43 @@ metadata {
   }
 }
 
+resource "kubernetes_horizontal_pod_autoscaler" "nginx_lb" {
+  metadata {
+    name = "nginx_lb"
+  }
+
+  spec {
+    min_replicas = 1
+    max_replicas = 2
+
+    scale_target_ref {
+      kind = "Deployment"
+      name = "nginx"
+    }
+
+    behavior {
+      scale_down {
+        stabilization_window_seconds = 300
+        select_policy                = "Min"
+        policy {
+          period_seconds = 310
+          type           = "Percent"
+          value          = 20
+        }
+      }
+      scale_up {
+        stabilization_window_seconds = 600
+        select_policy                = "Max"
+        policy {
+          period_seconds = 600
+          type           = "Percent"
+          value          = 40
+        }
+      }
+    }
+  }
+}
+
 output "load-balancer-ip" {
   value = google_compute_address.default.address
 }
