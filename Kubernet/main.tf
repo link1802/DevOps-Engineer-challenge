@@ -243,7 +243,7 @@ resource "google_compute_firewall" "lb" {
 resource "google_compute_firewall" "health" {
   name        = "k8s-9cf34e5201ee63aa-node-http-hc"
   network     = google_compute_network.main.name
-  project     = local.host_project_id
+#  project     = local.host_project_id
   description = "{\"kubernetes.io/cluster-id\":\"9cf34e5201ee63aa\"}"
 
   allow {
