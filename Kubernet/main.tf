@@ -130,7 +130,7 @@ resource "google_compute_router_nat" "mist_nat" {
 #}
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork_iam
-resource "google_compute_subnetwork_iam_binding" "binding" {
+#resource "google_compute_subnetwork_iam_binding" "binding" {
   #project    = google_compute_shared_vpc_host_project.host.project
   #region     = google_compute_subnetwork.private.region
   #subnetwork = google_compute_subnetwork.private.name
@@ -141,10 +141,10 @@ resource "google_compute_subnetwork_iam_binding" "binding" {
   #  "serviceAccount:${google_project.k8s-staging.number}@cloudservices.gserviceaccount.com",
   #  "serviceAccount:service-${google_project.k8s-staging.number}@container-engine-robot.iam.gserviceaccount.com"
   #]
-}
+#}
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_iam
-resource "google_project_iam_binding" "container-engine" {
+#resource "google_project_iam_binding" "container-engine" {
   #project = google_compute_shared_vpc_host_project.host.project
   #role    = "roles/container.hostServiceAgentUser"
 
@@ -152,20 +152,20 @@ resource "google_project_iam_binding" "container-engine" {
   #  "serviceAccount:service-${google_project.k8s-staging.number}@container-engine-robot.iam.gserviceaccount.com",
   #]
   #depends_on = [google_project_service.service]
-}
+#}
 #########################################################################################################
-resource "google_service_account" "k8s-staging" {
-  project    = local.service_project_id
-  account_id = "k8s-staging"
+#resource "google_service_account" "k8s-staging" {
+#  project    = local.service_project_id
+#  account_id = "k8s-staging"
 
-  depends_on = [google_project.k8s-staging]
-}
+#  depends_on = [google_project.k8s-staging]
+#}
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster
 resource "google_container_cluster" "gke" {
   name     = "gke"
   location = local.region
-  project  = local.service_project_id
+#  project  = local.service_project_id
 
   networking_mode = "VPC_NATIVE"
   network         = google_compute_network.main.self_link
@@ -204,7 +204,7 @@ resource "google_container_node_pool" "general" {
   name       = "general"
   location   = local.region
   cluster    = google_container_cluster.gke.name
-  project    = local.service_project_id
+#  project    = local.service_project_id
   node_count = 1
 
   management {
@@ -218,7 +218,7 @@ resource "google_container_node_pool" "general" {
     }
     machine_type = "e2-medium"
 
-    service_account = google_service_account.k8s-staging.email
+#    service_account = google_service_account.k8s-staging.email
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
@@ -228,7 +228,7 @@ resource "google_container_node_pool" "general" {
 resource "google_compute_firewall" "lb" {
   name        = "k8s-fw-abdca8a7bd83f4a84a8fb7a869242967"
   network     = google_compute_network.main.name
-  project     = local.host_project_id
+#  project     = local.host_project_id
   description = "{\"kubernetes.io/service-name\":\"default/nginx\", \"kubernetes.io/service-ip\":\"35.235.121.183\"}"
 
   allow {
