@@ -26,12 +26,12 @@ terraform {
 ################################################################################################
 locals {
   region               = "us-west2"
-  org_id               = "skydropx-devops-challenge"
+  #org_id               = "skydropx-devops-challenge"
   #billing_account      = "6753-6079-2119-1468"
-  host_project_name    = "host-staging"
-  service_project_name = "k8s-staging"
-  host_project_id      = "${local.host_project_name}-${random_integer.int.result}"
-  service_project_id   = "${local.service_project_name}-${random_integer.int.result}"
+  #host_project_name    = "host-staging"
+  #service_project_name = "k8s-staging"
+  #host_project_id      = "${local.host_project_name}-${random_integer.int.result}"
+  #service_project_id   = "${local.service_project_name}-${random_integer.int.result}"
   projects_api         = "container.googleapis.com"
   secondary_ip_ranges = {
     "pod-ip-range"      = "10.0.0.0/14",
@@ -41,38 +41,38 @@ locals {
 ################################################################################################
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project
 resource "google_project" "host-staging" {
-  name                = local.host_project_name
-  project_id          = local.host_project_id
+  #name                = local.host_project_name
+  #project_id          = local.host_project_id
   #billing_account     = local.billing_account
-  org_id              = local.org_id
-  auto_create_network = false
+  #org_id              = local.org_id
+  #auto_create_network = false
 }
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project
 resource "google_project" "k8s-staging" {
-  name                = local.service_project_name
-  project_id          = local.service_project_id
+  #name                = local.service_project_name
+  #project_id          = local.service_project_id
   #billing_account     = local.billing_account
-  org_id              = local.org_id
-  auto_create_network = false
+  #org_id              = local.org_id
+  #auto_create_network = false
 }
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_service
 resource "google_project_service" "host" {
-  project = google_project.host-staging.number
-  service = local.projects_api
+  #project = google_project.host-staging.number
+  #service = local.projects_api
 }
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_service
 resource "google_project_service" "service" {
-  project = google_project.k8s-staging.number
-  service = local.projects_api
+  #project = google_project.k8s-staging.number
+  #service = local.projects_api
 }
 ######################################################################################################
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network
 resource "google_compute_network" "main" {
   name                    = "main"
-  project                 = google_compute_shared_vpc_host_project.host.project
+  #project                 = google_compute_shared_vpc_host_project.host.project
   auto_create_subnetworks = false
   routing_mode            = "REGIONAL"
   mtu                     = 1500
@@ -81,7 +81,7 @@ resource "google_compute_network" "main" {
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork
 resource "google_compute_subnetwork" "private" {
   name                     = "private"
-  project                  = google_compute_shared_vpc_host_project.host.project
+  #project                  = google_compute_shared_vpc_host_project.host.project
   ip_cidr_range            = "10.5.0.0/20"
   region                   = local.region
   network                  = google_compute_network.main.self_link
@@ -131,27 +131,27 @@ resource "google_compute_shared_vpc_service_project" "service" {
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork_iam
 resource "google_compute_subnetwork_iam_binding" "binding" {
-  project    = google_compute_shared_vpc_host_project.host.project
-  region     = google_compute_subnetwork.private.region
-  subnetwork = google_compute_subnetwork.private.name
+  #project    = google_compute_shared_vpc_host_project.host.project
+  #region     = google_compute_subnetwork.private.region
+  #subnetwork = google_compute_subnetwork.private.name
 
-  role = "roles/compute.networkUser"
-  members = [
-    "serviceAccount:${google_service_account.k8s-staging.email}",
-    "serviceAccount:${google_project.k8s-staging.number}@cloudservices.gserviceaccount.com",
-    "serviceAccount:service-${google_project.k8s-staging.number}@container-engine-robot.iam.gserviceaccount.com"
-  ]
+  #role = "roles/compute.networkUser"
+  #members = [
+  #  "serviceAccount:${google_service_account.k8s-staging.email}",
+  #  "serviceAccount:${google_project.k8s-staging.number}@cloudservices.gserviceaccount.com",
+  #  "serviceAccount:service-${google_project.k8s-staging.number}@container-engine-robot.iam.gserviceaccount.com"
+  #]
 }
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_iam
 resource "google_project_iam_binding" "container-engine" {
-  project = google_compute_shared_vpc_host_project.host.project
-  role    = "roles/container.hostServiceAgentUser"
+  #project = google_compute_shared_vpc_host_project.host.project
+  #role    = "roles/container.hostServiceAgentUser"
 
-  members = [
-    "serviceAccount:service-${google_project.k8s-staging.number}@container-engine-robot.iam.gserviceaccount.com",
-  ]
-  depends_on = [google_project_service.service]
+  #members = [
+  #  "serviceAccount:service-${google_project.k8s-staging.number}@container-engine-robot.iam.gserviceaccount.com",
+  #]
+  #depends_on = [google_project_service.service]
 }
 #########################################################################################################
 resource "google_service_account" "k8s-staging" {
