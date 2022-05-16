@@ -30,7 +30,7 @@ resource "kubernetes_service" "nginx" {
 
   spec {
     selector = {
-      run = kubernetes_deployment.nginx.spec.0.template.0.metadata.0.labels.app
+      run = kubernetes_deployment.nginx.spec.0.template.0.metadata.0.labels.run
     }
 
     session_affinity = "ClientIP"
