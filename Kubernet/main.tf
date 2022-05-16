@@ -58,16 +58,16 @@ locals {
 #}
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_service
-resource "google_project_service" "host" {
+#resource "google_project_service" "host" {
   #project = google_project.host-staging.number
   #service = local.projects_api
-}
+#}
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_service
-resource "google_project_service" "service" {
+#resource "google_project_service" "service" {
   #project = google_project.k8s-staging.number
   #service = local.projects_api
-}
+#}
 ######################################################################################################
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network
 resource "google_compute_network" "main" {
