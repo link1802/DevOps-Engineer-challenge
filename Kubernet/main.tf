@@ -7,7 +7,7 @@ module "gke_auth" {
   cluster_name = module.gke.name
 }
 resource "local_file" "kubeconfig" {
-  provider = google-beta
+
   content  = module.gke_auth.kubeconfig_raw
   filename = "kubeconfig-${var.env_name}"
 }
