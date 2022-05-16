@@ -195,7 +195,7 @@ resource "google_container_cluster" "gke" {
   }
 
   workload_identity_config {
-    identity_namespace = "${google_project.k8s-staging.project_id}.svc.id.goog"
+    identity_namespace = "skydropx-devops-challenge.svc.id.goog"
   }
 
 }
