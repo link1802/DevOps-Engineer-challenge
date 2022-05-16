@@ -1,4 +1,6 @@
-provider "google" 
+provider "google" {
+  
+}
 module "gke_auth" {
   source = "terraform-google-modules/kubernetes-engine/google//modules/auth"
   depends_on   = [module.gke]
