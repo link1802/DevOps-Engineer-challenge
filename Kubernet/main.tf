@@ -58,7 +58,7 @@ metadata {
 
     selector {
       match_labels = {
-        run : "nginx"
+      #  run : "nginx"
       }
     }
 
