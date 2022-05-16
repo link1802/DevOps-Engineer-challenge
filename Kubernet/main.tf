@@ -54,11 +54,11 @@ metadata {
   }
 
   spec {
-    replicas = 3
+    replicas = 2
 
     selector {
       match_labels = {
-        run = "nginx"
+        run : "nginx"
       }
     }
 
