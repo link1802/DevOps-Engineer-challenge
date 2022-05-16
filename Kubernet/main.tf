@@ -110,11 +110,11 @@ output "load-balancer-ip" {
 }
 ################################################################################
 variable "region" {
-  default = "asia-east1" // Set as per your nearest location or preference 
+  default = "us-central1" // Set as per your nearest location or preference 
 }
 
 variable "location" {
-  default = "asia-east1-b"  // Set as per your nearest location or preference 
+  default = "us-central1-b"  // Set as per your nearest location or preference 
 }
 
 variable "network_name" {
