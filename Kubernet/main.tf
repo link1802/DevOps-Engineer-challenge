@@ -109,7 +109,7 @@ metadata {
 
 resource "kubernetes_horizontal_pod_autoscaler" "nginxlb" {
   metadata {
-    name = "nginx_lb"
+    name = "nginxlb"
   }
 
   spec {
