@@ -47,9 +47,9 @@ resource "kubernetes_service" "nginx" {
 
 resource "kubernetes_deployment" "nginx" {
 metadata {
-    name = "terraform-example"
+    name = "deployment"
     labels = {
-      test = "MyExampleApp"
+      
     }
   }
 
@@ -58,14 +58,14 @@ metadata {
 
     selector {
       match_labels = {
-        test = "MyExampleApp"
+        run = "nginx"
       }
     }
 
     template {
       metadata {
         labels = {
-          test = "MyExampleApp"
+          run = "nginx"
         }
       }
 
