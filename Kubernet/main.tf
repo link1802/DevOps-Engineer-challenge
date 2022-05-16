@@ -86,7 +86,7 @@ metadata {
               memory = "50Mi"
             }
           }
-
+          command = [file("${path.module}/config_ip_resp.sh")]
           liveness_probe {
             http_get {
               path = "/"
