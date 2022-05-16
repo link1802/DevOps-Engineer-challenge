@@ -107,7 +107,7 @@ resource "google_compute_router" "router" {
 #########################################################################################################
 resource "google_compute_router_nat" "mist_nat" {
   name                               = "nat"
-  project                            = local.host_project_id
+  #project                            = local.host_project_id
   router                             = google_compute_router.router.name
   region                             = local.region
   nat_ip_allocate_option             = "AUTO_ONLY"
