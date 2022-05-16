@@ -109,7 +109,7 @@ metadata {
 
 resource "kubernetes_horizontal_pod_autoscaler" "nginxlb" {
   metadata {
-    name = "nginxlb"
+    name = "nginx"
   }
 
   spec {
@@ -117,7 +117,7 @@ resource "kubernetes_horizontal_pod_autoscaler" "nginxlb" {
     max_replicas = 2
 
     scale_target_ref {
-      kind = "Deployment"
+      kind = kubernetes_deployment.nginx.name
       name = "nginx"
     }
 
