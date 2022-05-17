@@ -20,8 +20,8 @@ variable "proyect_region" {
   type        = string
   default     = "us-central1"
 }
-variable "proyect_billcount_id" {
-  description = "the region of proyect"
+variable "proyect_billing_id" {
+  description = "the id of billing account"
   type        = string
   default     = "000000-000000-000000"
 }

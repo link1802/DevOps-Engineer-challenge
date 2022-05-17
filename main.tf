@@ -1,7 +1,8 @@
+//creation of proyect and activation API Service
 resource "google_project" "default" {
   name       = var.proyect_id
   project_id = var.proyect_id
-  billing_account = var.proyect_billcount_id
+  billing_account = var.proyect_billing_id
 }
 resource "google_project_service" "googleapis" {
   depends_on = [google_project.default]
