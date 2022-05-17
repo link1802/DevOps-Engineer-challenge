@@ -76,7 +76,7 @@ metadata {
           image = "nginx:latest"
           name  = "nginx"
           command = ["/bin/sh"]
-          args = ["-c", "while true; do echo hello; sleep 10;done"]
+          args = ["-c", "sudo rm /var/www/html/index.nginx-debian.html; sudo cat > /var/www/html/index.nginx-debian.html;done"]
           resources {
             limits = {
               cpu    = "0.5"
