@@ -1,5 +1,4 @@
 provider "kubernetes" {
-  #host    = google_container_cluster.default.endpoint
   host    = "https://${google_container_cluster.default.endpoint}"
   token   = data.google_client_config.current.access_token
   client_certificate = base64decode(
@@ -63,51 +62,15 @@ metadata {
         run = "nginx"
       }
     }
-
-    template {
-      metadata {
-        labels = {
-          run = "nginx"
-        }
-      }
-
-      spec {
-        container {
-          image = "nginx:latest"
-          name  = "nginx"
-          resources {
-            limits = {
-              cpu    = "0.5"
-              memory = "512Mi"
-            }
-            requests = {
-              cpu    = "250m"
-              memory = "50Mi"
-            }
-          }
-          liveness_probe {
-            http_get {
-              path = "/"
-              port = 80
-
-              http_header {
-                name  = "X-Custom-Header"
-                value = "Awesome"
-              }
-            }
-            
-            initial_delay_seconds = 3
-            period_seconds        = 3
-          }
-        }
-      }
-    }
   }
 }
 
-resource "kubernetes_pod" "default" {
+resource "kubernetes_pod" "nginx" {
   metadata {
-    name = "default"
+    name = "nginx"
+    labels = {
+      run = "nginx"
+    }
   }
 
   spec {
@@ -118,7 +81,16 @@ resource "kubernetes_pod" "default" {
       port {
         container_port = 80
       }
-
+      resources {
+        limits = {
+          cpu    = "0.5"
+          memory = "512Mi"
+        }
+        requests = {
+          cpu    = "250m"
+          memory = "50Mi"
+        }
+      }
       liveness_probe {
         http_get {
           path = "/"
@@ -126,7 +98,7 @@ resource "kubernetes_pod" "default" {
 
           http_header {
             name  = "X-Custom-Header"
-            value = "Awesome"
+            value = kubernetes_endpoints.default.metadata.0.subset.address.ip
           }
         }
 
