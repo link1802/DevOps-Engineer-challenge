@@ -1,3 +1,7 @@
+resource "google_project" "default" {
+  name       = "devops-engineer-challenge-1"
+  project_id = "devops-engineer-challenge-1"
+}
 
 //creation of VM before create a template
 resource "google_compute_instance" "default" {
