@@ -11,7 +11,7 @@ resource "google_project_service" "googleapis" {
 
 //creation of VM before create a template
 resource "google_compute_instance" "default" {
-  depends_on = [google_project.default]
+  depends_on = [google_project_service.googleapis]
   name         = var.vm_base_name
   machine_type = var.machine_type
   allow_stopping_for_update = true
@@ -36,7 +36,7 @@ resource "google_compute_instance" "default" {
 
 //delay for the shutdown of instance
 resource "time_sleep" "w60s" {
-  depends_on = [google_compute_instance.default]
+  depends_on = [google_project_service.googleapis]
   create_duration = "60s"
 }
 
@@ -50,7 +50,7 @@ resource "google_compute_image" "default" {
 ///////////rules of firewall and networking//////////////
 // Forwarding rule for Regional External Load Balancing
 resource "google_compute_address" "default" {
-  depends_on = [google_project.default]
+  depends_on = [google_project_service.googleapis]
   name = "website-ip-1"
   network_tier = "STANDARD"
 }
