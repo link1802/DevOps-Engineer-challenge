@@ -1,7 +1,6 @@
 resource "google_compute_instance" "default" {
   name         = "instancia-base"
-  machine_type = "e2-micro"
-  #zone         = "us-central1-a"
+  machine_type = var.machine_type
   allow_stopping_for_update = true
   tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
   
@@ -37,7 +36,6 @@ resource "google_compute_image" "default" {
 resource "google_compute_forwarding_rule" "default" {
   depends_on = [google_compute_subnetwork.proxy]
   name   = "website-forwarding-rule"
-  #region = "us-central1"
 
   ip_protocol           = "TCP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
@@ -49,13 +47,11 @@ resource "google_compute_forwarding_rule" "default" {
 }
 
 resource "google_compute_region_target_http_proxy" "default" {
-  #region  = "us-central1"
   name    = "website-proxy"
   url_map = google_compute_region_url_map.default.id
 }
 
 resource "google_compute_region_url_map" "default" {
-  #region          = "us-central1"
   name            = "website-map"
   default_service = google_compute_region_backend_service.default.id
 }
@@ -70,18 +66,16 @@ resource "google_compute_region_backend_service" "default" {
     capacity_scaler = 1.0
   }
 
-  #region      = "us-central1"
   name        = "website-backend"
   protocol    = "HTTP"
   timeout_sec = 10
-
   health_checks = [google_compute_region_health_check.default.id]
 }
 
 
 
 resource "google_compute_instance_group_manager" "rigm" {
-  #zone = "us-central1-a"
+
   name     = "website-rigm"
   version {
     instance_template = google_compute_instance_template.instance_template.id
@@ -116,7 +110,6 @@ resource "google_compute_instance_template" "instance_template" {
 
 resource "google_compute_region_health_check" "default" {
   depends_on = [google_compute_firewall.fw4]
-  #region = "us-central1"
   name   = "website-hc"
   tcp_health_check {
     port = "80"
@@ -125,7 +118,6 @@ resource "google_compute_region_health_check" "default" {
 
 resource "google_compute_address" "default" {
   name = "website-ip-1"
-  #region = "us-central1"
   network_tier = "STANDARD"
 }
 
