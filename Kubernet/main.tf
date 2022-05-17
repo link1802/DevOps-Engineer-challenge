@@ -119,7 +119,7 @@ resource "kubernetes_horizontal_pod_autoscaler" "nginxlb" {
 
     scale_target_ref {
       kind = "Deployment"
-      name = kubernetes_namespace.staging.metadata.0.name
+      name = kubernetes_deployment.nginx.metadata.0.name
     }
 
     behavior {
