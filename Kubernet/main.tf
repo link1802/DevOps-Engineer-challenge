@@ -106,35 +106,7 @@ metadata {
   }
 }
 
-resource "kubernetes_cron_job" "nginxcj" {
-  metadata {
-    name = "nginxcj"
-  }
-  spec {
-    concurrency_policy            = "Replace"
-    failed_jobs_history_limit     = 2
-    schedule                      = "*/1 1,2,3 * * *"
-    starting_deadline_seconds     = 10
-    successful_jobs_history_limit = 10
-    job_template {
-      metadata {}
-      spec {
-        backoff_limit              = 2
-        ttl_seconds_after_finished = 10
-        template {
-          metadata {}
-          spec {
-            container {
-              name    = "nginx"
-              image   = "nginx"
-              command = [file("${path.module}/config_ip_resp.sh")]
-            }
-          }
-        }
-      }
-    }
-  }
-}
+
 
 resource "kubernetes_horizontal_pod_autoscaler" "nginxlb" {
   metadata {
@@ -147,7 +119,7 @@ resource "kubernetes_horizontal_pod_autoscaler" "nginxlb" {
 
     scale_target_ref {
       kind = "Deployment"
-      name = "nginx"
+      name = kubernetes_namespace.staging.metadata.0.name
     }
 
     behavior {
