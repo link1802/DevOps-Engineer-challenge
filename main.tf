@@ -38,6 +38,11 @@ resource "google_compute_image" "default" {
 
 ///////////rules of firewall and networking//////////////
 // Forwarding rule for Regional External Load Balancing
+resource "google_compute_address" "default" {
+  name = "website-ip-1"
+  network_tier = "STANDARD"
+}
+
 resource "google_compute_forwarding_rule" "default" {
   depends_on = [google_compute_subnetwork.proxy]
   name   = "website-forwarding-rule"
@@ -199,13 +204,6 @@ resource "google_compute_region_health_check" "default" {
     port = "80"
   }
 }
-
-#resource "google_compute_address" "default" {
-#  name = "website-ip-1"
-#  network_tier = "STANDARD"
-#}
-
-
 
 resource "google_compute_autoscaler" "default" {
   name   = "autoscaler"
