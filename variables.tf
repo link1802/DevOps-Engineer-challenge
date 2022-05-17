@@ -13,7 +13,7 @@ provider "google" {
 variable "proyect_id" {
   description = "the name of proyect"
   type        = string
-  default     = "devops-engineer-challenge"
+  default     = "devops-engineer-challenge-2"
 }
 variable "proyect_region" {
   description = "the region of proyect"
@@ -27,7 +27,7 @@ variable "machine_type" {
   default     = "e2-micro"
 }
 variable "vm_base_name" {
-  description = "name of vm"
+  description = "name of vm with nginx"
   type        = string
   default     = "vm-base"
 }
