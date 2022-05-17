@@ -1,4 +1,5 @@
 data "google_billing_account" "acct" {
+  display_name = "Billing Account"
   open         = true
 }
 resource "google_project" "default" {
