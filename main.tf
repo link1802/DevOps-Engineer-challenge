@@ -1,5 +1,5 @@
 data "google_billing_account" "acct" {
-  display_name = "Billing Account"
+  billing_account = "01638A-C37615-F934FC"
   open         = true
 }
 resource "google_project" "default" {
