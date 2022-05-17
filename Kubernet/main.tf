@@ -119,7 +119,7 @@ resource "kubernetes_horizontal_pod_autoscaler" "nginxlb" {
 
     scale_target_ref {
       kind = "Deployment"
-      name = kubernetes_deployment.nginx.metadata.0.name
+      name = google_container_cluster.default.name
     }
 
     behavior {
@@ -192,6 +192,9 @@ resource "google_container_cluster" "default" {
   min_master_version = data.google_container_engine_versions.default.latest_master_version
   network            = google_compute_subnetwork.default.name
   subnetwork         = google_compute_subnetwork.default.name
+  addons_config {
+    horizontal_pod_autoscaling.disabled = false
+  }
 
   // Use legacy ABAC until these issues are resolved:
   //   https://github.com/mcuadros/terraform-provider-helm/issues/56
@@ -203,24 +206,4 @@ resource "google_container_cluster" "default" {
     when    = destroy
     command = "sleep 90"
   }
-}
-
-output "network" {
-  value = google_compute_subnetwork.default.network
-}
-
-output "subnetwork_name" {
-  value = google_compute_subnetwork.default.name
-}
-
-output "cluster_name" {
-  value = google_container_cluster.default.name
-}
-
-output "cluster_region" {
-  value = var.region
-}
-
-output "cluster_location" {
-  value = google_container_cluster.default.location
 }
