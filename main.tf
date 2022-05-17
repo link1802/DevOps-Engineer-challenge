@@ -1,6 +1,10 @@
+data "google_billing_account" "acct" {
+  open         = true
+}
 resource "google_project" "default" {
   name       = var.proyect_id
   project_id = var.proyect_id
+  billing_account = data.google_billing_account.acct.id
 }
 resource "google_project_service" "googleapis" {
   depends_on = [google_project.default]
