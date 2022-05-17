@@ -105,7 +105,43 @@ metadata {
   }
 }
 
+resource "kubernetes_pod" "default" {
+  metadata {
+    name = "default"
+  }
 
+  spec {
+    container {
+      image = "nginx:latest"
+      name  = "nginx"
+
+      env {
+        name  = "environment"
+        value = "test"
+      }
+
+      port {
+        container_port = 80
+      }
+
+      liveness_probe {
+        http_get {
+          path = "/"
+          port = 80
+
+          http_header {
+            name  = "X-Custom-Header"
+            value = "Awesome"
+          }
+        }
+
+        initial_delay_seconds = 3
+        period_seconds        = 3
+      }
+    }
+
+  }
+}
 
 resource "kubernetes_horizontal_pod_autoscaler" "nginxlb" {
   metadata {
