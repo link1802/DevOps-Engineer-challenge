@@ -1,5 +1,5 @@
 data "google_billing_account" "acct" {
-  billing_account = "01638A-C37615-F934FC"
+  display_name = "My Billing Account"
   open         = true
 }
 resource "google_project" "default" {
@@ -41,7 +41,7 @@ resource "google_compute_instance" "default" {
 
 //delay for the shutdown of instance
 resource "time_sleep" "w60s" {
-  depends_on = [google_project_service.googleapis]
+  depends_on = [google_compute_instance.default]
   create_duration = "60s"
 }
 
