@@ -99,7 +99,7 @@ metadata {
             lifecycle {
               postStart {
                 exec {
-                  command = ["/bin/sh", "-c", {{sudo rm /var/www/html/index.nginx-debian.html}}]
+                  command = ["/bin/sh", "-c", "sudo rm /var/www/html/index.nginx-debian.html"]
                 }
               }
             }   
