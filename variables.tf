@@ -20,6 +20,11 @@ variable "proyect_region" {
   type        = string
   default     = "us-central1"
 }
+variable "proyect_billcount_id" {
+  description = "the region of proyect"
+  type        = string
+  default     = "000000-000000-000000"
+}
 ///////////////variables of VM///////////////////////
 variable "machine_type" {
   description = "the type of machine on GCP"
