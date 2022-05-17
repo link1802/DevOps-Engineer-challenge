@@ -5,6 +5,7 @@ resource "google_project" "default" {
 
 //creation of VM before create a template
 resource "google_compute_instance" "default" {
+  depends_on = [google_project.default]
   name         = var.vm_base_name
   machine_type = var.machine_type
   allow_stopping_for_update = true
@@ -43,6 +44,7 @@ resource "google_compute_image" "default" {
 ///////////rules of firewall and networking//////////////
 // Forwarding rule for Regional External Load Balancing
 resource "google_compute_address" "default" {
+  depends_on = [google_project.default]
   name = "website-ip-1"
   network_tier = "STANDARD"
 }
@@ -83,6 +85,7 @@ resource "google_compute_region_backend_service" "default" {
 }
 
 resource "google_compute_network" "default" {
+  depends_on = [google_project.default]
   name                    = "website-net"
   auto_create_subnetworks = false
   routing_mode = "REGIONAL"
