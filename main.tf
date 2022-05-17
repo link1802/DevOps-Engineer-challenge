@@ -2,6 +2,12 @@ resource "google_project" "default" {
   name       = var.proyect_id
   project_id = var.proyect_id
 }
+resource "google_project_service" "googleapis" {
+  depends_on = [google_project.default]
+  project = var.proyect_id
+  service = "compute.googleapis.com"
+  disable_dependent_services = true
+}
 
 //creation of VM before create a template
 resource "google_compute_instance" "default" {
