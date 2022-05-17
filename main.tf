@@ -18,7 +18,7 @@ resource "google_compute_instance" "default" {
       network_tier = "STANDARD"
     }
   }
-  metadata_startup_script = file("${path.module}/install_nginx.sh")
+  metadata_startup_script = file("${path.module}/scripts/install_nginx.sh")
 }
 
 resource "time_sleep" "w60s" {
@@ -103,7 +103,7 @@ resource "google_compute_instance_template" "instance_template" {
     auto_delete  = true
     boot         = true
   }
-  metadata_startup_script = file("${path.module}/config_ip_resp.sh")
+  metadata_startup_script = file("${path.module}/scripts/config_ip_resp.sh")
 
   tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
 }
