@@ -91,7 +91,7 @@ resource "google_compute_region_backend_service" "default" {
 }
 
 resource "google_compute_network" "default" {
-  depends_on = [google_project.default]
+  depends_on = [google_project_service.googleapis]
   name                    = "website-net"
   auto_create_subnetworks = false
   routing_mode = "REGIONAL"
