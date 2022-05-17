@@ -91,7 +91,7 @@ metadata {
 
               http_header {
                 name  = "X-Custom-Header"
-                value = google_container_cluster.default.endpoint.private_cluster_config.private_endpoint 
+                value = "192.168.1.125" 
               }
             }
             
