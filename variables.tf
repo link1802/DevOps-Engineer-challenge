@@ -24,7 +24,7 @@ variable "machine_type" {
 variable "vm_base_name" {
   description = "name of vm"
   type        = string
-  default     = "vm_base"
+  default     = "vm-base"
 }
 variable "vm_base_os" {
   description = "the os of the vm"
