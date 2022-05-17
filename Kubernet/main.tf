@@ -62,53 +62,49 @@ metadata {
         run = "nginx"
       }
     }
-  }
-}
 
-resource "kubernetes_pod" "nginx" {
-  metadata {
-    name = "nginx"
-    labels = {
-      run = "nginx"
-    }
-  }
-
-  spec {
-    container {
-      image = "nginx:latest"
-      name  = "nginx"
-
-      port {
-        container_port = 80
-      }
-      resources {
-        limits = {
-          cpu    = "0.5"
-          memory = "512Mi"
-        }
-        requests = {
-          cpu    = "250m"
-          memory = "50Mi"
+    template {
+      metadata {
+        labels = {
+          run = "nginx"
         }
       }
-      liveness_probe {
-        http_get {
-          path = "/"
-          port = 80
 
-          http_header {
-            name  = "X-Custom-Header"
-            value = kubernetes_endpoints.default.metadata.0.subset.address.ip
+      spec {
+        container {
+          image = "nginx:latest"
+          name  = "nginx"
+          resources {
+            limits = {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
+          }
+          liveness_probe {
+            http_get {
+              path = "/"
+              port = 80
+
+              http_header {
+                name  = "X-Custom-Header"
+                value = google_container_cluster.default.endpoint.private_cluster_config.private_endpoint 
+              }
+            }
+            
+            initial_delay_seconds = 3
+            period_seconds        = 3
           }
         }
-
-        initial_delay_seconds = 3
-        period_seconds        = 3
       }
     }
-
   }
 }
+
+
 
 resource "kubernetes_horizontal_pod_autoscaler" "nginxlb" {
   metadata {
