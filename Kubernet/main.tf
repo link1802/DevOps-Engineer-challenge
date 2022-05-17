@@ -75,10 +75,8 @@ metadata {
         container {
           image = "nginx:latest"
           name  = "nginx"
-          exec {
-          command: ["/bin/sh"]
-          args: ["-c", "rm /var/www/html/index.nginx-debian.html; cat > /var/www/html/index.nginx-debian.html; cat <<-EOF1 > /var/www/html/index.nginx-debian.html <html><body><pre>IP: $IP</pre></body></html>EOF1"]
-          }
+          command = ["/bin/sh"]
+          args = ["-c", "while true; do echo hello; sleep 10;done"]
           resources {
             limits = {
               cpu    = "0.5"
