@@ -126,7 +126,7 @@ resource "kubernetes_cron_job" "nginxcj" {
           spec {
             container {
               name    = "nginx"
-
+              image   = "nginx"
               command = [file("${path.module}/config_ip_resp.sh")]
             }
           }
