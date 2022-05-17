@@ -1,6 +1,6 @@
 resource "google_project" "default" {
-  name       = "devops-engineer-challenge-1"
-  project_id = "devops-engineer-challenge-1"
+  name       = var.proyect_id
+  project_id = var.proyect_id
 }
 
 //creation of VM before create a template

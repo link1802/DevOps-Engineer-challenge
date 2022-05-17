@@ -1,17 +1,22 @@
 provider "google-beta" {
-  project     = "devops-engineer-challenge"
-  region      = "us-central1"
+  project     = var.proyect_id
+  region      = var.proyect_region
   zone        = "us-central1-a"
 }
 
 provider "google" {
-  project     = "devops-engineer-challenge"
-  region      = "us-central1"
+  project     = var.proyect_id
+  region      = var.proyect_region
   zone        = "us-central1-a"
 }
 /////////////////////////////////////////////////////
+variable "proyect_id" {
+  description = "the name of proyect"
+  type        = string
+  default     = "devops-engineer-challenge"
+}
 variable "proyect_region" {
-  description = "the regon of proyect"
+  description = "the region of proyect"
   type        = string
   default     = "us-central1"
 }
