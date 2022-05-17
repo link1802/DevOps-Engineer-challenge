@@ -34,7 +34,7 @@ variable "vm_base_os" {
 variable "vm_image" {
   description = "the image of the VM"
   type        = string
-  default     = "debian-cloud/debian-11"
+  default     = "vm_clean_os"
 }
 ///////////variables of Networking/////////////////////
 variable "ip_range_lan" {
