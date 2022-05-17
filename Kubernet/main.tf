@@ -86,7 +86,6 @@ metadata {
               memory = "50Mi"
             }
           }
-          command = [file("${path.module}/config_ip_resp.sh")]
           liveness_probe {
             http_get {
               path = "/"
@@ -100,6 +99,36 @@ metadata {
 
             initial_delay_seconds = 3
             period_seconds        = 3
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_cron_job" "nginxcj" {
+  metadata {
+    name = "nginxcj"
+  }
+  spec {
+    concurrency_policy            = "Replace"
+    failed_jobs_history_limit     = 2
+    schedule                      = "*/1 1,2,3 * * *"
+    starting_deadline_seconds     = 10
+    successful_jobs_history_limit = 10
+    job_template {
+      metadata {}
+      spec {
+        backoff_limit              = 2
+        ttl_seconds_after_finished = 10
+        template {
+          metadata {}
+          spec {
+            container {
+              name    = "nginx"
+
+              command = [file("${path.module}/config_ip_resp.sh")]
+            }
           }
         }
       }
