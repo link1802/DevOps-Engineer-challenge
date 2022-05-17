@@ -129,17 +129,17 @@ resource "google_compute_firewall" "rule2" {
   direction = "INGRESS"
 }
 
-#resource "google_compute_firewall" "fw3" {
-#  depends_on = [google_compute_firewall.rule2]
-#  name = "website-fw-3"
-#  network = google_compute_network.default.id
-#  source_ranges = ["130.211.0.0/22", "35.191.0.0/16"]
-#  allow {
-#    protocol = "tcp"
-#  }
-#  target_tags = ["load-balanced-backend"]
-#  direction = "INGRESS"
-#}
+resource "google_compute_firewall" "rule4" {
+  depends_on = [google_compute_firewall.rule3]
+  name = "website-fw-3"
+  network = google_compute_network.default.id
+  source_ranges = ["130.211.0.0/22", "35.191.0.0/16"]
+  allow {
+    protocol = "tcp"
+  }
+  target_tags = ["load-balanced-backend"]
+  direction = "INGRESS"
+}
 
 resource "google_compute_firewall" "rule3" {
   depends_on = [google_compute_firewall.rule2]
