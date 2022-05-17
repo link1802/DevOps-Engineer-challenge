@@ -115,11 +115,6 @@ resource "kubernetes_pod" "default" {
       image = "nginx:latest"
       name  = "nginx"
 
-      env {
-        name  = "environment"
-        value = "test"
-      }
-
       port {
         container_port = 80
       }
