@@ -75,8 +75,7 @@ metadata {
         container {
           image = "nginx:latest"
           name  = "nginx"
-          command = ["/bin/sh"]
-          args = ["-c", "sudo rm /var/www/html/index.nginx-debian.html; sudo cat > /var/www/html/index.nginx-debian.html;done"]
+          
           resources {
             limits = {
               cpu    = "0.5"
@@ -97,7 +96,13 @@ metadata {
                 value = "Awesome"
               }
             }
-
+            lifecycle {
+              postStart {
+                exec {
+                  command = ["/bin/sh", "-c", {{sudo rm /var/www/html/index.nginx-debian.html}}]
+                }
+              }
+            }   
             initial_delay_seconds = 3
             period_seconds        = 3
           }
