@@ -192,8 +192,6 @@ resource "google_container_cluster" "default" {
   min_master_version = data.google_container_engine_versions.default.latest_master_version
   network            = google_compute_subnetwork.default.name
   subnetwork         = google_compute_subnetwork.default.name
-  horizontal_pod_autoscaling.disabled = false
-  
 
   // Use legacy ABAC until these issues are resolved:
   //   https://github.com/mcuadros/terraform-provider-helm/issues/56
