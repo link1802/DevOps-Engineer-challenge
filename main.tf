@@ -1,11 +1,7 @@
-data "google_billing_account" "acct" {
-  display_name = "Mi cuenta de facturación"
-  open         = true
-}
 resource "google_project" "default" {
   name       = var.proyect_id
   project_id = var.proyect_id
-  billing_account = data.google_billing_account.acct.id
+  billing_account = var.bill_id
 }
 resource "google_project_service" "googleapis" {
   depends_on = [google_project.default]
