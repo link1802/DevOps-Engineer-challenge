@@ -34,7 +34,7 @@ variable "vm_base_os" {
 variable "vm_image" {
   description = "the image of the VM"
   type        = string
-  default     = "vm_clean_os"
+  default     = "vm-clean-os"
 }
 ///////////variables of Networking/////////////////////
 variable "ip_range_lan" {
