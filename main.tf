@@ -233,3 +233,7 @@ resource "google_compute_autoscaler" "default" {
     }
   }
 }
+
+output "load-balancer-ip" {
+  value = google_compute_address.default.address
+}

@@ -143,9 +143,7 @@ resource "kubernetes_horizontal_pod_autoscaler" "nginxlb" {
   }
 }
 
-output "load-balancer-ip" {
-  value = google_compute_address.default.address
-}
+
 ################################################################################
 variable "region" {
   default = "us-central1" // Set as per your nearest location or preference 
