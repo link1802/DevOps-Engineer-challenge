@@ -34,7 +34,7 @@ se agrega el diagrama del script para mejor comprension:
 ## Requirements
 
 1. Create a project which must have two subnets, one private and one public.
-2. Launch an auto scaling group with two compute instances within the private subnet.
+2. Launch an auto scaling group with two computers instances within the private subnet.
 3. Install nginx and show the private ip.
 4. Create a balancer on the public subnet.
 5. Create an auto scaling policy with the following parameters: scale in : CPU utilization > 40%, scale out : CPU Utilization < 20%
