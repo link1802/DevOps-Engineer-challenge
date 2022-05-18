@@ -28,6 +28,9 @@ terraform apply -var="proyect_billing_id=000000-000000-000000"
 donde el valor de "proyect_billing_id" debe ser el id de facturacion de la cuenta, en caso de no proporcionarlo, la API de google, no se habilitara y por lo tanto no podra ejecutar el script
 para una mejor referencia de como obtener este valor, vea la siguiente [liga](https://console.cloud.google.com/billing?_ga=2.229969052.1664475333.1652314216-1631168250.1652309941) ahi debera ver el ID a agregar a la variable
 
+se agrega el diagrama del script para mejor comprension:
+![diagrama](/main/assets/img/diagrama.png)
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 ## Requirements
 
