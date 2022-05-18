@@ -13,7 +13,7 @@ provider "google" {
 variable "proyect_id" {
   description = "the name of proyect"
   type        = string
-  default     = "devops-engineer-challenge-12"
+  default     = "devops-engineer-challenge"
 }
 variable "proyect_region" {
   description = "the region of proyect"
