@@ -50,7 +50,6 @@ resource "google_compute_image" "default" {
 }
 
 ///////////rules of firewall and networking//////////////
-// Forwarding rule for Regional External Load Balancing
 resource "google_compute_address" "default" {
   depends_on = [google_project_service.googleapis]
   name = "website-ip-1"
@@ -109,7 +108,6 @@ resource "google_compute_subnetwork" "default" {
 resource "google_compute_subnetwork" "proxy" {
   name          = "website-net-proxy"
   ip_cidr_range = var.ip_range_proxy
-  #region        = var.proyect_region
   network       = google_compute_network.default.id
   purpose       = "REGIONAL_MANAGED_PROXY"
   role          = "ACTIVE"
@@ -212,6 +210,7 @@ resource "google_compute_instance_template" "default" {
   tags = ["allow-ssh", "load-balanced-backend", "http-server", "https-server"]
 }
 
+//check status of instance
 resource "google_compute_region_health_check" "default" {
   depends_on = [google_compute_firewall.rule3]
   name   = "website-hc"
@@ -220,12 +219,13 @@ resource "google_compute_region_health_check" "default" {
   }
 }
 
+//automatic scale the number of instance
 resource "google_compute_autoscaler" "default" {
   name   = "autoscaler"
   target = google_compute_instance_group_manager.rigm.id
   autoscaling_policy {
-    max_replicas    = 2
-    min_replicas    = 1
+    max_replicas    = var.instance_autocaler_max
+    min_replicas    = var.instance_autocaler_min
     cooldown_period = 60
 
     cpu_utilization {
@@ -234,6 +234,7 @@ resource "google_compute_autoscaler" "default" {
   }
 }
 
+//print the ip to make a get with curl
 output "load-balancer-ip" {
   value = google_compute_address.default.address
 }

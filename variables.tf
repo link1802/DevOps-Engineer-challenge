@@ -9,7 +9,7 @@ provider "google" {
   region      = var.proyect_region
   zone        = "us-central1-a"
 }
-/////////////////////////////////////////////////////
+////////Proyect settings//////////////////////////////
 variable "proyect_id" {
   description = "the name of proyect"
   type        = string
@@ -57,9 +57,19 @@ variable "ip_range_proxy" {
   type        = string
   default     = "10.129.0.0/26"
 }
-/////////////////////////////////////////////////////
+////////////instance settings////////////////////////
 variable "instance_group_size" {
   description = "size of instance group"
   type        = number
   default     = 2
+}
+variable "instance_autocaler_max" {
+  description = "maximun size of instance autocaler"
+  type        = number
+  default     = 2
+}
+variable "instance_autocaler_min" {
+  description = "minimun size of instance autoscaler"
+  type        = number
+  default     = 1
 }
