@@ -195,8 +195,8 @@ resource "google_container_cluster" "default" {
   enable_legacy_abac = true
 // Wait for the GCE LB controller to cleanup the resources.
   // Wait for the GCE LB controller to cleanup the resources.
-  #provisioner "local-exec" {
-    #when    = destroy
-    #command = "cat ´texto de ejemplo´>> /var/www/html/index.nginx-debian.html"
-  #}
+  provisioner "local-exec" {
+    when    = destroy
+    command = "sleep 90"
+  }
 }
