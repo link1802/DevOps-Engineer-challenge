@@ -37,14 +37,14 @@ resource "google_compute_instance" "default" {
 //////////////////////////////////////////////////////////////////////////////////
 
 //delay for the shutdown of instance
-resource "time_sleep" "w60s" {
+resource "time_sleep" "w120s" {
   depends_on = [google_compute_instance.default]
-  create_duration = "60s"
+  create_duration = "120s"
 }
 
 //create the template on base a VM shutdown
 resource "google_compute_image" "default" {
-  depends_on = [time_sleep.w60s]
+  depends_on = [time_sleep.w120s]
   name = var.vm_image
   source_disk = google_compute_instance.default.boot_disk[0].source
 }

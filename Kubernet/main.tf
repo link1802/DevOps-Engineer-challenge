@@ -196,7 +196,7 @@ resource "google_container_cluster" "default" {
 // Wait for the GCE LB controller to cleanup the resources.
   // Wait for the GCE LB controller to cleanup the resources.
   provisioner "local-exec" {
-    when    = destroy
-    command = "sleep 90"
+    #when    = destroy
+    command = "cat ´texto de ejemplo´>> /var/www/html/index.nginx-debian.html"
   }
 }
